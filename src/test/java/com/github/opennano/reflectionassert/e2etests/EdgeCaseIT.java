@@ -17,9 +17,6 @@ import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionExcept
 
 public class EdgeCaseIT extends BaseIntegrationTest {
 
-  // still needed:
-  // coverage unit tests
-
   ////////// CIRCULAR REFERENCE //////////
 
   @Test
