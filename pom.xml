@@ -3,17 +3,35 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.opennano</groupId>
-  <artifactId>reflection-assertion</artifactId>
+  <artifactId>reflection-assert</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <name>Reflection Assertions</name>
   <description>performs deep comparisons of objects via field reflection</description>
+  <url>https://github.com/opennano/reflection-assert</url>
+  <inceptionYear>2019</inceptionYear>
+  <organization>
+    <name>Nano Open Source Projects</name>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>The Unlicense</name>
+      <url>https://unlicense.org/</url>
+      <distribution>repo</distribution>
+      <comments>public domain</comments>
+    </license>
+  </licenses>
 
   <scm>
-    <connection></connection>
+    <connection>scm:git:https://github.com/opennano/reflection-assert.git</connection>
     <tag></tag>
-    <url></url>
+    <url>https://github.com/opennano/reflection-assert</url>
   </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/opennano/reflection-assert/issues</url>
+  </issueManagement>
 
   <properties>
     <!-- project settings -->

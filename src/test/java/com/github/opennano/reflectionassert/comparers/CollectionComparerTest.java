@@ -29,6 +29,7 @@ public class CollectionComparerTest {
     @Override
     public Diff compare(
         String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+    	
       return null;
     }
   }
