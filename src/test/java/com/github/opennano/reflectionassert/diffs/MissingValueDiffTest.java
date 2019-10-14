@@ -22,8 +22,8 @@ public class MissingValueDiffTest {
   public void assertConstructorAndGettersAreValid() {
     Diff diff = new MissingValueDiff("mockPath", mockValue);
     assertEquals("mockPath", diff.getPath());
-    assertSame(mockValue, diff.getLeftValue());
-    assertNull(diff.getRightValue());
+    assertSame(mockValue, diff.getExpectedValue());
+    assertNull(diff.getActualValue());
   }
 
   @Test

@@ -46,8 +46,8 @@ public class ComparerManagerTest {
   @Mock private ValueComparer mockValueComparer;
   @Mock private Map<CacheKey, Diff> cachedDiffs;
   @Mock private Diff mockDiff;
-  @Mock private Object mockLeft;
-  @Mock private Object mockRight;
+  @Mock private Object mockExpected;
+  @Mock private Object mockActual;
 
   @Test
   public void ctor_strict() {
@@ -111,75 +111,75 @@ public class ComparerManagerTest {
 
   @Test
   public void getDiff_cached() {
-    when(cachedDiffs.get(new CacheKey(mockLeft, mockRight))).thenReturn(mockDiff);
+    when(cachedDiffs.get(new CacheKey(mockExpected, mockActual))).thenReturn(mockDiff);
     when(mockDiff.getType()).thenReturn(DiffType.DIFFERENT);
     when(mockDiff.getPath()).thenReturn("mockDiffPath");
 
-    manager.getDiff("mockPathArg", mockLeft, mockRight, true);
+    manager.getDiff("mockPathArg", mockExpected, mockActual, true);
 
     verify(mockDiff).cloneAndRepath("mockDiffPath", "mockPathArg");
-    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockLeft, mockRight);
+    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockExpected, mockActual);
   }
 
   @Test
   public void getDiff_cachedPartialOk() {
-    when(cachedDiffs.get(new CacheKey(mockLeft, mockRight))).thenReturn(mockDiff);
+    when(cachedDiffs.get(new CacheKey(mockExpected, mockActual))).thenReturn(mockDiff);
     when(mockDiff.getPath()).thenReturn("mockDiffPath");
 
-    manager.getDiff("mockPathArg", mockLeft, mockRight, false);
+    manager.getDiff("mockPathArg", mockExpected, mockActual, false);
 
     verify(mockDiff).cloneAndRepath("mockDiffPath", "mockPathArg");
-    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockLeft, mockRight);
+    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockExpected, mockActual);
   }
 
   @Test
   public void getDiff_cachedPartialNotOk() {
-    CacheKey key = new CacheKey(mockLeft, mockRight);
+    CacheKey key = new CacheKey(mockExpected, mockActual);
 
     when(cachedDiffs.get(key)).thenReturn(mockDiff);
     when(mockDiff.getType()).thenReturn(DiffType.PARTIAL);
     when(mockComparerChain.stream()).thenReturn(Stream.of(mockValueComparer));
-    when(mockValueComparer.canCompare(mockLeft, mockRight)).thenReturn(true);
-    when(mockValueComparer.compare("mockPathArg", mockLeft, mockRight, manager, true))
+    when(mockValueComparer.canCompare(mockExpected, mockActual)).thenReturn(true);
+    when(mockValueComparer.compare("mockPathArg", mockExpected, mockActual, manager, true))
         .thenReturn(mockDiff);
 
-    manager.getDiff("mockPathArg", mockLeft, mockRight, true);
+    manager.getDiff("mockPathArg", mockExpected, mockActual, true);
 
     verify(cachedDiffs).put(key, NULL_TOKEN);
     verify(cachedDiffs).put(key, mockDiff);
-    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockLeft, mockRight);
+    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockExpected, mockActual);
   }
 
   @Test
   public void getDiff_notCached() {
-    CacheKey key = new CacheKey(mockLeft, mockRight);
+    CacheKey key = new CacheKey(mockExpected, mockActual);
 
     when(cachedDiffs.get(key)).thenReturn(null);
     when(mockComparerChain.stream()).thenReturn(Stream.of(mockValueComparer));
-    when(mockValueComparer.canCompare(mockLeft, mockRight)).thenReturn(true);
-    when(mockValueComparer.compare("mockPathArg", mockLeft, mockRight, manager, true))
+    when(mockValueComparer.canCompare(mockExpected, mockActual)).thenReturn(true);
+    when(mockValueComparer.compare("mockPathArg", mockExpected, mockActual, manager, true))
         .thenReturn(mockDiff);
 
-    manager.getDiff("mockPathArg", mockLeft, mockRight, true);
+    manager.getDiff("mockPathArg", mockExpected, mockActual, true);
 
     verify(cachedDiffs).put(key, NULL_TOKEN);
     verify(cachedDiffs).put(key, mockDiff);
-    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockLeft, mockRight);
+    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockExpected, mockActual);
   }
 
   @Test
   public void getDiff_noComparerForDiff() {
-    CacheKey key = new CacheKey(mockLeft, mockRight);
+    CacheKey key = new CacheKey(mockExpected, mockActual);
 
     when(cachedDiffs.get(key)).thenReturn(null);
     when(mockComparerChain.stream()).thenReturn(Stream.of(mockValueComparer));
-    when(mockValueComparer.canCompare(mockLeft, mockRight)).thenReturn(false);
+    when(mockValueComparer.canCompare(mockExpected, mockActual)).thenReturn(false);
 
     Class<? extends Exception> type = ReflectionAssertionInternalException.class;
-    assertThrows(type, () -> manager.getDiff("mockPathArg", mockLeft, mockRight, true));
+    assertThrows(type, () -> manager.getDiff("mockPathArg", mockExpected, mockActual, true));
 
     verify(cachedDiffs).put(key, NULL_TOKEN);
-    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockLeft, mockRight);
+    verifyNoMoreInteractions(mockComparerChain, cachedDiffs, mockDiff, mockExpected, mockActual);
   }
 
   @Test

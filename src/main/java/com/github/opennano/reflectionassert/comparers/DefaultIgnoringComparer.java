@@ -11,36 +11,48 @@ import com.github.opennano.reflectionassert.worker.ValueComparer;
  * A comparer that ignores all diffs when the expected value is a Java default (null, 0, false,
  * etc.).
  *
- * <p>See {@link LeniencyMode#IGNORE_DEFAULTS}.
+ * <p>@see {@link LeniencyMode#IGNORE_DEFAULTS}.
  */
 public class DefaultIgnoringComparer extends ValueComparer {
 
-  /** returns true if the left object is a java default */
+  /**
+   * @param expected the expected object
+   * @param actual the actual object
+   * @return true if the expected object is a Java default
+   */
   @Override
-  public boolean canCompare(Object left, Object right) {
+  public boolean canCompare(Object expected, Object actual) {
     // handle objects whose expected value is null
-    if (left == null) {
+    if (expected == null) {
       return true;
     }
     // handle primitive booleans whose expected value is false
-    if (left instanceof Boolean && !(Boolean) left) {
+    if (expected instanceof Boolean && !(Boolean) expected) {
       return true;
     }
     // handle primitive chars whose expected value is the null character
-    if (left instanceof Character && (Character) left == Character.MIN_VALUE) {
+    if (expected instanceof Character && (Character) expected == Character.MIN_VALUE) {
       return true;
     }
     // handle primitive numeric types whose expected value is 0
-    if (left instanceof Number && ((Number) left).doubleValue() == 0d) {
+    if (expected instanceof Number && ((Number) expected).doubleValue() == 0d) {
       return true;
     }
     return false;
   }
 
-  /** always returns the null token--this comparer never creates real diffs */
+  /**
+   * Always return the null token--this comparer never creates real diffs.
+   *
+   * @param path unused
+   * @param expected unused
+   * @param actual unused
+   * @param comparer unused
+   * @param fullDiff unused
+   */
   @Override
   public Diff compare(
-      String name, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
     return NULL_TOKEN;
   }

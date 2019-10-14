@@ -8,42 +8,64 @@ import java.util.stream.Stream;
 
 import com.github.opennano.reflectionassert.diffs.Diff;
 import com.github.opennano.reflectionassert.diffs.ParentDiff;
+import com.github.opennano.reflectionassert.diffs.PartialDiff;
 
 /**
- * Interface for comparing two objects, producing a {@link Diff}.
+ * Interface for a class that can compare two objects and produce a {@link Diff}.
  *
  * <p>One should always first call {@link #canCompare(Object, Object)} to ensure comparison is
- * supported by this delegate before calling {@link #compare(Object, Object, ComparerManager)}.
+ * supported by this delegate before calling {@link #compare(String, Object, Object,
+ * ComparerManager, boolean)}.
  */
 public abstract class ValueComparer {
 
   /**
-   * Call this method before calling {@link #compare(Object, Object, ComparerManager)}. If this
-   * method returns false this comparer should not be used to compare the given objects.
+   * Call this method before calling {@link #compare(String, Object, Object, ComparerManager,
+   * boolean)}.
+   *
+   * @param expected the expected object
+   * @param actual the actual object
+   * @return false if this comparer should not be used to compare the given objects
    */
-  public abstract boolean canCompare(Object left, Object right);
+  public abstract boolean canCompare(Object expected, Object actual);
 
   /**
    * Compares the given objects and returns the diffs, or a cacheable null token if there are none.
    * The comparer parameter is used to perform deeper comparisons as needed (e.g. comparing fields
    * within objects or items in a collection).
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer used when recursion is necessary on child objects
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   * @return a Diff containing the results of the comparison
    */
   public abstract Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff);
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff);
 
-  /** factory method that creates a parent diff if appropriate, otherwise a token */
-  protected Diff createDiff(String path, List<Diff> fieldDiffs, boolean fullDiff) {
-    if (fieldDiffs.isEmpty()) {
+  /**
+   * Factory method that creates a parent diff if appropriate, otherwise a token.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param childDiffs the differences detected in children of the current node
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   * @return a new subtype of Diff appropriate for the types of parameters provided
+   */
+  protected Diff createDiff(String path, List<Diff> childDiffs, boolean fullDiff) {
+    if (childDiffs.isEmpty()) {
       return NULL_TOKEN;
     }
-    return fullDiff ? new ParentDiff(path, fieldDiffs) : PARTIAL_DIFF_TOKEN;
+    return fullDiff ? new ParentDiff(path, childDiffs) : PARTIAL_DIFF_TOKEN;
   }
 
-  protected boolean areBothOneOfTheseTypes(Object left, Object right, Class<?>... types) {
-    if (left == null || right == null) {
+  protected boolean areBothOneOfTheseTypes(Object expected, Object actual, Class<?>... types) {
+    if (expected == null || actual == null) {
       return false;
     }
-    return Stream.of(types).anyMatch(type -> areBothSameType(type, left, right));
+    return Stream.of(types).anyMatch(type -> areBothSameType(type, expected, actual));
   }
 
   protected boolean areBothSameType(Class<?> type, Object... value) {

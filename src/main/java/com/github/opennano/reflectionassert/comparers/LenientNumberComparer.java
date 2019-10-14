@@ -11,16 +11,26 @@ import com.github.opennano.reflectionassert.worker.ValueComparer;
 public class LenientNumberComparer extends ValueComparer {
 
   @Override
-  public boolean canCompare(Object left, Object right) {
-    return areBothOneOfTheseTypes(left, right, Number.class);
+  public boolean canCompare(Object expected, Object actual) {
+    return areBothOneOfTheseTypes(expected, actual, Number.class);
   }
 
-  /** compares two numeric values */
+  /**
+   * Compare two numeric values.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer unused
+   * @param fullDiff unused
+   */
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
-    return asDouble(left).equals(asDouble(right)) ? NULL_TOKEN : new SimpleDiff(path, left, right);
+    return asDouble(expected).equals(asDouble(actual))
+        ? NULL_TOKEN
+        : new SimpleDiff(path, expected, actual);
   }
 
   private Double asDouble(Object value) {

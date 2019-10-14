@@ -24,12 +24,12 @@ public class LenientDateComparerTest {
   @InjectMocks private LenientDateComparer comparer;
 
   @Test
-  public void canCompare_leftNull() {
+  public void canCompare_expectedNull() {
     assertTrue(comparer.canCompare(null, new Date(0)));
   }
 
   @Test
-  public void canCompare_leftNullInvalidRight() {
+  public void canCompare_expectedNullInvalidActual() {
     assertFalse(comparer.canCompare(null, ""));
   }
 
@@ -39,12 +39,12 @@ public class LenientDateComparerTest {
   }
 
   @Test
-  public void canCompare_rightNull() {
+  public void canCompare_actualNull() {
     assertTrue(comparer.canCompare(new Date(0), null));
   }
 
   @Test
-  public void canCompare_rightNullInvalidLeft() {
+  public void canCompare_actualNullInvalidExpected() {
     assertFalse(comparer.canCompare("", null));
   }
 
@@ -69,23 +69,23 @@ public class LenientDateComparerTest {
   }
 
   @Test
-  public void compare_leftNull() {
+  public void compare_expectedNull() {
     Diff actual = comparer.compare("mockPath", null, 2, null, false);
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(null, actual.getLeftValue());
-    assertEquals(2, actual.getRightValue());
+    assertEquals(null, actual.getExpectedValue());
+    assertEquals(2, actual.getActualValue());
   }
 
   @Test
-  public void compare_rightNull() {
+  public void compare_actualNull() {
     Diff actual = comparer.compare("mockPath", 1, null, null, false);
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(1, actual.getLeftValue());
-    assertEquals(null, actual.getRightValue());
+    assertEquals(1, actual.getExpectedValue());
+    assertEquals(null, actual.getActualValue());
   }
 
   @Test

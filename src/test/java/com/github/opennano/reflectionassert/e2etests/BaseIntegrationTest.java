@@ -85,8 +85,8 @@ public abstract class BaseIntegrationTest {
     }
     return map;
   }
-  
+
   protected List<?> listOf(Object... values) {
-	  return Arrays.asList(values);
+    return Arrays.asList(values);
   }
 }

@@ -117,17 +117,17 @@ public class DiffView {
     String path = diff.getPath();
     switch (diff.getType()) {
       case MISSING:
-        expected = formatter.format(diff.getLeftValue());
+        expected = formatter.format(diff.getExpectedValue());
         description = String.format(MISSING_VALUE_TEMPLATE, path, expected);
         break;
       case UNEXPECTED:
-        actual = formatter.format(diff.getRightValue());
+        actual = formatter.format(diff.getActualValue());
         description = String.format(UNEXPECTED_VALUE_TEMPLATE, path, actual);
         break;
       case DIFFERENT:
       default:
-        expected = formatter.format(diff.getLeftValue());
-        actual = formatter.format(diff.getRightValue());
+        expected = formatter.format(diff.getExpectedValue());
+        actual = formatter.format(diff.getActualValue());
         description = String.format(DIFFERENT_VALUE_TEMPLATE, path, expected, actual);
     }
     return description;

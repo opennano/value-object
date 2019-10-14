@@ -1,8 +1,8 @@
 package com.github.opennano.reflectionassert;
 
 /**
- * LeniencyMode modes specify how to compare two values. No mode means strict comparison. Modes can
- * be combined.
+ * Leniency modes specify how to compare two values. No mode means strict comparison. Modes can be
+ * combined.
  */
 public enum LeniencyMode {
 

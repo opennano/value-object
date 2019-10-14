@@ -6,11 +6,11 @@ package com.github.opennano.reflectionassert.diffs;
  */
 public final class MissingValueDiff extends Diff {
 
-  public MissingValueDiff(String path, Object left) {
-    super(path, left, null);
+  public MissingValueDiff(String path, Object expected) {
+    super(path, expected, null);
   }
-  
+
   public DiffType getType() {
-	  return DiffType.MISSING;
+    return DiffType.MISSING;
   }
 }

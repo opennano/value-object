@@ -34,8 +34,8 @@ public class LenientNumberComparerTest {
     Diff actual = comparer.compare("mockPath", 1, 2, null, false);
 
     assertEquals("mockPath", actual.getPath());
-    assertEquals(1, actual.getLeftValue());
-    assertEquals(2, actual.getRightValue());
+    assertEquals(1, actual.getExpectedValue());
+    assertEquals(2, actual.getActualValue());
   }
 
   @Test
@@ -48,8 +48,8 @@ public class LenientNumberComparerTest {
     Diff actual = comparer.compare("mockPath", 1, Double.NaN, null, false);
 
     assertEquals("mockPath", actual.getPath());
-    assertEquals(1, actual.getLeftValue());
-    assertEquals(Double.NaN, actual.getRightValue());
+    assertEquals(1, actual.getExpectedValue());
+    assertEquals(Double.NaN, actual.getActualValue());
   }
 
   @Test
@@ -62,8 +62,8 @@ public class LenientNumberComparerTest {
     Diff actual = comparer.compare("mockPath", 1, Double.POSITIVE_INFINITY, null, false);
 
     assertEquals("mockPath", actual.getPath());
-    assertEquals(1, actual.getLeftValue());
-    assertEquals(Double.POSITIVE_INFINITY, actual.getRightValue());
+    assertEquals(1, actual.getExpectedValue());
+    assertEquals(Double.POSITIVE_INFINITY, actual.getActualValue());
   }
 
   @Test

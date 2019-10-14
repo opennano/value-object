@@ -25,8 +25,8 @@ public class DiffTest {
       super(null, null, null);
     }
 
-    public StubDiff(String path, Object leftValue, Object rightValue) {
-      super(path, leftValue, rightValue);
+    public StubDiff(String path, Object expectedValue, Object actualValue) {
+      super(path, expectedValue, actualValue);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class DiffTest {
   public void assertConstructorAndGettersAreValid() {
     Diff diff = new StubDiff("mockPath", mockValue1, mockValue2);
     assertEquals("mockPath", diff.getPath());
-    assertSame(mockValue1, diff.getLeftValue());
-    assertSame(mockValue2, diff.getRightValue());
+    assertSame(mockValue1, diff.getExpectedValue());
+    assertSame(mockValue2, diff.getActualValue());
   }
 
   @Test
@@ -79,8 +79,8 @@ public class DiffTest {
 
     Diff clone = diff.cloneAndRepath("mockPath", "newPath");
     assertEquals("newPath.mockValue", clone.getPath());
-    assertSame(mockValue1, clone.getLeftValue());
-    assertSame(mockValue2, clone.getRightValue());
+    assertSame(mockValue1, clone.getExpectedValue());
+    assertSame(mockValue2, clone.getActualValue());
   }
 
   @Test
@@ -96,7 +96,7 @@ public class DiffTest {
 
     assertEquals(StubDiff.class, clone.getClass());
     assertEquals("mockPath", clone.getPath());
-    assertSame(mockValue1, clone.getLeftValue());
-    assertSame(mockValue2, clone.getRightValue());
+    assertSame(mockValue1, clone.getExpectedValue());
+    assertSame(mockValue2, clone.getActualValue());
   }
 }

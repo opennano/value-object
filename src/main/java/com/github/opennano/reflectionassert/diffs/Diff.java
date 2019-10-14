@@ -20,25 +20,25 @@ public abstract class Diff implements Cloneable {
    */
   private String path;
 
-  private Object leftValue;
-  private Object rightValue;
+  private Object expectedValue;
+  private Object actualValue;
 
-  public Diff(String path, Object leftValue, Object rightValue) {
+  public Diff(String path, Object expectedValue, Object actualValue) {
     this.path = path;
-    this.leftValue = leftValue;
-    this.rightValue = rightValue;
+    this.expectedValue = expectedValue;
+    this.actualValue = actualValue;
   }
 
   public String getPath() {
     return path;
   }
 
-  public Object getLeftValue() {
-    return leftValue;
+  public Object getExpectedValue() {
+    return expectedValue;
   }
 
-  public Object getRightValue() {
-    return rightValue;
+  public Object getActualValue() {
+    return actualValue;
   }
 
   public abstract DiffType getType();
@@ -47,11 +47,22 @@ public abstract class Diff implements Cloneable {
    * The provided default behavior is for "terminal" diff nodes that represent a single diff to
    * report to the user. For "internal" diffs in the tree this method should be overridden to
    * provide the logic for visiting each child.
+   *
+   * @param view an object that collects information about differences found
+   * @param visitor an object implementing the visitor pattern that visits all diff nodes in a tree
    */
-  public void accept(DiffView view, DiffVisitor diffVisitor) {
+  public void accept(DiffView view, DiffVisitor visitor) {
     view.formatDiff(this);
   }
 
+  /**
+   * Used when a diff is found in a cache, this method will create a new subtree of diffs identical
+   * to the other tree, but with a different root path.
+   *
+   * @param originalRootPath the part of the path that needs to be replaced on all child nodes
+   * @param newRootPath the new base path to set on all child nodes
+   * @return a new diff object with a new path but the same expected and actual values
+   */
   public Diff cloneAndRepath(String originalRootPath, String newRootPath) {
     try {
       Diff clone = clone();

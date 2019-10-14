@@ -43,9 +43,9 @@ public class DiffViewTest {
   public void describeDiff_different() {
     when(mockDiff.getPath()).thenReturn("mockPath");
     when(mockDiff.getType()).thenReturn(DIFFERENT);
-    when(mockDiff.getLeftValue()).thenReturn(1);
+    when(mockDiff.getExpectedValue()).thenReturn(1);
     when(mockValueFormatter.format(any())).thenReturn("x", "y");
-    when(mockDiff.getRightValue()).thenReturn(2);
+    when(mockDiff.getActualValue()).thenReturn(2);
 
     String expected =
         String.join(
@@ -60,7 +60,7 @@ public class DiffViewTest {
   public void describeDiff_missing() {
     when(mockDiff.getPath()).thenReturn("mockPath");
     when(mockDiff.getType()).thenReturn(MISSING);
-    when(mockDiff.getLeftValue()).thenReturn(1);
+    when(mockDiff.getExpectedValue()).thenReturn(1);
     when(mockValueFormatter.format(1)).thenReturn("x");
 
     String expected =
@@ -75,7 +75,7 @@ public class DiffViewTest {
   public void describeDiff_unexpected() {
     when(mockDiff.getPath()).thenReturn("mockPath");
     when(mockDiff.getType()).thenReturn(UNEXPECTED);
-    when(mockDiff.getRightValue()).thenReturn(2);
+    when(mockDiff.getActualValue()).thenReturn(2);
     when(mockValueFormatter.format(2)).thenReturn("y");
 
     String expected =

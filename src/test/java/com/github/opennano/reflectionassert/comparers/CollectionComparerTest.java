@@ -28,8 +28,8 @@ public class CollectionComparerTest {
 
     @Override
     public Diff compare(
-        String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
-    	
+        String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
+
       return null;
     }
   }
@@ -37,12 +37,12 @@ public class CollectionComparerTest {
   @InjectMocks private StubCollectionComparer comparer;
 
   @Test
-  public void canCompare_leftNull() {
+  public void canCompare_expectedNull() {
     assertFalse(comparer.canCompare(null, EMPTY_LIST));
   }
 
   @Test
-  public void canCompare_rightNull() {
+  public void canCompare_actualNull() {
     assertFalse(comparer.canCompare(EMPTY_LIST, null));
   }
 
@@ -67,12 +67,12 @@ public class CollectionComparerTest {
   }
 
   @Test
-  public void canCompare_leftWrongType() {
+  public void canCompare_expectedWrongType() {
     assertFalse(comparer.canCompare("", EMPTY_LIST));
   }
 
   @Test
-  public void canCompare_rightWrongType() {
+  public void canCompare_actualWrongType() {
     assertFalse(comparer.canCompare(EMPTY_LIST, ""));
   }
 

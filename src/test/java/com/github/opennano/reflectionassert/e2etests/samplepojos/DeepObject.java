@@ -11,7 +11,11 @@ public class DeepObject {
 
   private Wrapper root;
 
-  /** puts the provided value at the end of a long property path */
+  /**
+   * Puts the provided value at the end of a long property path
+   *
+   * @param terminalValue the value to put at the end of the deep object path
+   */
   public DeepObject(Object terminalValue) {
 
     Map<String, Object> map = new HashMap<>();

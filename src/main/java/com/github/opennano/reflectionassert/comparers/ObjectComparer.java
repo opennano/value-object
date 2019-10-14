@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.github.opennano.reflectionassert.diffs.Diff;
+import com.github.opennano.reflectionassert.diffs.PartialDiff;
 import com.github.opennano.reflectionassert.diffs.SimpleDiff;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionInternalException;
 import com.github.opennano.reflectionassert.worker.ComparerManager;
@@ -23,45 +24,66 @@ public class ObjectComparer extends ValueComparer {
   private static final String DOT = ".";
   private static final String EMPTY = "";
 
-  /** can compare any non-null objects, should be last in the chain */
+  /**
+   * @param expected the expected object
+   * @param actual the actual object
+   * @return true for any two (non-null) objects
+   */
   @Override
-  public boolean canCompare(Object left, Object right) {
-    return left != null && right != null;
+  public boolean canCompare(Object expected, Object actual) {
+    return expected != null && actual != null;
   }
 
   /**
-   * Compares two non-null objects of the same type by iterating over all their fields--including
+   * Compare two non-null objects of the same type by iterating over all their fields--including
    * superclass fields--comparing their values. Static and transient fields are ignored. Returns
    * null if both objects are equal.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer used when recursion is necessary on child objects
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
    */
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
     // first check for different class types
-    Class<?> leftType = left.getClass();
-    Class<?> rightType = right.getClass();
-    if (!leftType.isAssignableFrom(rightType)) {
-      return new SimpleDiff(path, leftType, rightType);
+    Class<?> expectedType = expected.getClass();
+    Class<?> actualType = actual.getClass();
+    if (!expectedType.isAssignableFrom(actualType)) {
+      return new SimpleDiff(path, expectedType, actualType);
     }
 
     // compare all fields of the object using reflection
-    List<Diff> fieldDiffs = compareFields(path, left, right, leftType, comparer, fullDiff);
+    List<Diff> fieldDiffs = compareFields(path, expected, actual, expectedType, comparer, fullDiff);
     return createDiff(path, fieldDiffs, fullDiff);
   }
 
-  /** reflectively compares the values of all fields in the given objects */
+  /**
+   * Reflectively compare the values of all fields in the given objects.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param type the parent object's class
+   * @param comparer used when recursion is necessary on child objects
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   */
   private List<Diff> compareFields(
       String path,
-      Object left,
-      Object right,
+      Object expected,
+      Object actual,
       Class<?> type,
       ComparerManager comparer,
       boolean fullDiff) {
 
     return listFields(type)
         .stream()
-        .map(field -> getFieldDiff(path, field, left, right, comparer, fullDiff))
+        .map(field -> getFieldDiff(path, field, expected, actual, comparer, fullDiff))
         .filter(diff -> diff != NULL_TOKEN)
         .collect(Collectors.toList());
   }
@@ -90,15 +112,15 @@ public class ObjectComparer extends ValueComparer {
   private Diff getFieldDiff(
       String parentPath,
       Field field,
-      Object left,
-      Object right,
+      Object expected,
+      Object actual,
       ComparerManager comparer,
       boolean fullDiff) {
 
     String fieldName = field.getName();
     String path = String.join(parentPath.length() > 1 ? DOT : EMPTY, parentPath, fieldName);
     try {
-      return comparer.getDiff(path, field.get(left), field.get(right), fullDiff);
+      return comparer.getDiff(path, field.get(expected), field.get(actual), fullDiff);
     } catch (IllegalArgumentException | IllegalAccessException e) {
       throw new ReflectionAssertionInternalException(
           "error reflectively comparing field: " + field, e);
