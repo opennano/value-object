@@ -19,9 +19,16 @@
       <name>The Unlicense</name>
       <url>https://unlicense.org/</url>
       <distribution>repo</distribution>
-      <comments>public domain</comments>
+      <comments>public domain software</comments>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <id>opennano</id>
+      <email>natenobility@gmail.com</email>
+    </developer>
+  </developers>
 
   <scm>
     <connection>scm:git:https://github.com/opennano/reflection-assert.git</connection>
