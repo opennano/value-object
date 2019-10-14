@@ -20,41 +20,45 @@ public class SimpleComparer extends ValueComparer {
   private static final String JAVA_LANG = Object.class.getPackage().getName();
 
   @Override
-  public boolean canCompare(Object left, Object right) {
-    return left == right
-        || left == null
-        || right == null
-        || areEitherJavaLang(left, right)
-        || areBothOneOfTheseTypes(left, right, Enum.class, Date.class, Calendar.class, File.class);
+  public boolean canCompare(Object expected, Object actual) {
+    return expected == actual
+        || expected == null
+        || actual == null
+        || areEitherJavaLang(expected, actual)
+        || areBothOneOfTheseTypes(
+            expected, actual, Enum.class, Date.class, Calendar.class, File.class);
   }
 
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
     // if they're the same instance (or both null) there can't be a diff
-    if (left == right) {
+    if (expected == actual) {
       return NULL_TOKEN;
     }
 
-    if (left == null || right == null) {
-      return new SimpleDiff(path, left, right);
+    if (expected == null || actual == null) {
+      return new SimpleDiff(path, expected, actual);
     }
 
     // if they're both not null but their classes are incompatible it's a class diff
-    if (!(left.getClass().isAssignableFrom(right.getClass()))) {
-      return new SimpleDiff(path, left.getClass(), right.getClass());
+    if (!(expected.getClass().isAssignableFrom(actual.getClass()))) {
+      return new SimpleDiff(path, expected.getClass(), actual.getClass());
     }
 
     // handle comparing any two values using equals if we can
     // comparable values may be null
-    return compare(path, getComparableValue(left), getComparableValue(right), left, right);
+    return compare(
+        path, getComparableValue(expected), getComparableValue(actual), expected, actual);
   }
 
   private Diff compare(
-      String path, Object left, Object right, Object originalLeft, Object originalRight) {
+      String path, Object expected, Object actual, Object originalExpected, Object originalActual) {
 
-    return left.equals(right) ? NULL_TOKEN : new SimpleDiff(path, originalLeft, originalRight);
+    return expected.equals(actual)
+        ? NULL_TOKEN
+        : new SimpleDiff(path, originalExpected, originalActual);
   }
 
   private Object getComparableValue(Object value) {
@@ -73,8 +77,8 @@ public class SimpleComparer extends ValueComparer {
         "this comparer doesn't support type: " + value.getClass());
   }
 
-  private boolean areEitherJavaLang(Object left, Object right) {
-    return Stream.of(left, right).anyMatch(this::isJavaLang);
+  private boolean areEitherJavaLang(Object expected, Object actual) {
+    return Stream.of(expected, actual).anyMatch(this::isJavaLang);
   }
 
   private boolean isJavaLang(Object value) {

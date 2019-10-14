@@ -20,26 +20,41 @@ import com.github.opennano.reflectionassert.worker.ValueComparer;
  */
 public class LenientDateComparer extends ValueComparer {
 
-  /** true if both objects are instances of a date-like type, also ok if one is null */
+  /**
+   * Return true if both objects are instances of a date-like type, also ok if one is null.
+   *
+   * @param expected the expected object
+   * @param actual the actual object
+   */
   @Override
-  public boolean canCompare(Object left, Object right) {
-    if (left == null) {
-      return right != null && isAnyType(right, Date.class, Calendar.class);
-    } else if (right == null) {
-      return isAnyType(left, Date.class, Calendar.class);
+  public boolean canCompare(Object expected, Object actual) {
+    if (expected == null) {
+      return actual != null && isAnyType(actual, Date.class, Calendar.class);
+    } else if (actual == null) {
+      return isAnyType(expected, Date.class, Calendar.class);
     }
-    return areBothOneOfTheseTypes(left, right, Date.class, Calendar.class);
+    return areBothOneOfTheseTypes(expected, actual, Date.class, Calendar.class);
   }
 
   private boolean isAnyType(Object value, Class<?>... types) {
     return Stream.of(types).anyMatch(type -> type.isAssignableFrom(value.getClass()));
   }
 
-  /** compares the given dates, ignoring any diffs */
+  /**
+   * Compare the given dates, ignoring any diffs.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer unused
+   * @param fullDiff unused
+   */
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
-    return (left == null || right == null) ? new SimpleDiff(path, left, right) : NULL_TOKEN;
+    return (expected == null || actual == null)
+        ? new SimpleDiff(path, expected, actual)
+        : NULL_TOKEN;
   }
 }

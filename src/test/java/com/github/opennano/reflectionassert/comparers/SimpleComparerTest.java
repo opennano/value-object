@@ -29,12 +29,12 @@ public class SimpleComparerTest {
   @InjectMocks private SimpleComparer comparer;
 
   @Test
-  public void canCompare_leftNull() {
+  public void canCompare_expectedNull() {
     assertTrue(comparer.canCompare(null, 1));
   }
 
   @Test
-  public void canCompare_rightNull() {
+  public void canCompare_actualNull() {
     assertTrue(comparer.canCompare(1, null));
   }
 
@@ -55,12 +55,12 @@ public class SimpleComparerTest {
   }
 
   @Test
-  public void canCompare_leftJavaLang() {
+  public void canCompare_expectedJavaLang() {
     assertTrue(comparer.canCompare(new RuntimeException(), ""));
   }
 
   @Test
-  public void canCompare_rightJavaLang() {
+  public void canCompare_actualJavaLang() {
     assertTrue(comparer.canCompare("", new RuntimeException()));
   }
 
@@ -70,33 +70,33 @@ public class SimpleComparerTest {
   }
 
   @Test
-  public void canCompare_leftDate() {
+  public void canCompare_expectedDate() {
     assertFalse(comparer.canCompare(new Date(0), new StringWriter()));
   }
 
   @Test
-  public void canCompare_rightDate() {
+  public void canCompare_actualDate() {
     assertFalse(comparer.canCompare(new StringWriter(), new Date(0)));
   }
 
   @Test
-  public void compare_leftNull() {
+  public void compare_expectedNull() {
     Diff actual = comparer.compare("mockPath", null, 2, null, false);
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(null, actual.getLeftValue());
-    assertEquals(2, actual.getRightValue());
+    assertEquals(null, actual.getExpectedValue());
+    assertEquals(2, actual.getActualValue());
   }
 
   @Test
-  public void compare_rightNull() {
+  public void compare_actualNull() {
     Diff actual = comparer.compare("mockPath", 1, null, null, false);
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(1, actual.getLeftValue());
-    assertEquals(null, actual.getRightValue());
+    assertEquals(1, actual.getExpectedValue());
+    assertEquals(null, actual.getActualValue());
   }
 
   @Test
@@ -151,13 +151,13 @@ public class SimpleComparerTest {
 
   @Test
   public void compare_differentCalendars() {
-    Calendar left = Calendar.getInstance();
-    left.setTime(new Date(0));
-    Calendar right = Calendar.getInstance();
-    right.setTime(new Date(1));
-    Diff actual = comparer.compare("mockPath", left, right, null, false);
+    Calendar expected = Calendar.getInstance();
+    expected.setTime(new Date(0));
+    Calendar actual = Calendar.getInstance();
+    actual.setTime(new Date(1));
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, null, false);
 
-    assertNotEquals(NULL_TOKEN, actual);
+    assertNotEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
@@ -180,28 +180,28 @@ public class SimpleComparerTest {
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(1, actual.getLeftValue());
-    assertEquals(2, actual.getRightValue());
+    assertEquals(1, actual.getExpectedValue());
+    assertEquals(2, actual.getActualValue());
   }
 
   @Test
-  public void compare_subTypeLeftOk() {
-    Object left = new Object();
-    Diff actual = comparer.compare("mockPath", left, 1, null, false);
+  public void compare_subTypeExpectedOk() {
+    Object expected = new Object();
+    Diff actual = comparer.compare("mockPath", expected, 1, null, false);
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(left, actual.getLeftValue());
-    assertEquals(1, actual.getRightValue());
+    assertEquals(expected, actual.getExpectedValue());
+    assertEquals(1, actual.getActualValue());
   }
 
   @Test
-  public void compare_subTypeRightNotOk() {
+  public void compare_subTypeActualNotOk() {
     Diff actual = comparer.compare("mockPath", 1, new Object(), null, false);
 
     assertEquals(SimpleDiff.class, actual.getClass());
     assertEquals("mockPath", actual.getPath());
-    assertEquals(Integer.class, actual.getLeftValue());
-    assertEquals(Object.class, actual.getRightValue());
+    assertEquals(Integer.class, actual.getExpectedValue());
+    assertEquals(Object.class, actual.getActualValue());
   }
 }

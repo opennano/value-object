@@ -22,8 +22,8 @@ public class SimpleDiffTest {
   public void assertConstructorAndGettersAreValid() {
     Diff diff = new SimpleDiff("mockPath", mockValue1, mockValue2);
     assertEquals("mockPath", diff.getPath());
-    assertSame(mockValue1, diff.getLeftValue());
-    assertSame(mockValue2, diff.getRightValue());
+    assertSame(mockValue1, diff.getExpectedValue());
+    assertSame(mockValue2, diff.getActualValue());
   }
 
   @Test

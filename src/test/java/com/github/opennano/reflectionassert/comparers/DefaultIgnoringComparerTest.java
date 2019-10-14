@@ -18,12 +18,12 @@ public class DefaultIgnoringComparerTest {
   @InjectMocks private DefaultIgnoringComparer comparer;
 
   @Test
-  public void canCompare_leftNull() {
+  public void canCompare_expectedNull() {
     assertTrue(comparer.canCompare(null, ""));
   }
 
   @Test
-  public void canCompare_rightNull() {
+  public void canCompare_actualNull() {
     assertFalse(comparer.canCompare("", null));
   }
 
@@ -38,12 +38,12 @@ public class DefaultIgnoringComparerTest {
   }
 
   @Test
-  public void canCompare_leftFalse() {
+  public void canCompare_expectedFalse() {
     assertTrue(comparer.canCompare(false, true));
   }
 
   @Test
-  public void canCompare_rightFalse() {
+  public void canCompare_actualFalse() {
     assertFalse(comparer.canCompare(true, false));
   }
 
@@ -58,12 +58,12 @@ public class DefaultIgnoringComparerTest {
   }
 
   @Test
-  public void canCompare_leftNullChar() {
+  public void canCompare_expectedNullChar() {
     assertTrue(comparer.canCompare(Character.MIN_VALUE, 'a'));
   }
 
   @Test
-  public void canCompare_rightNullChar() {
+  public void canCompare_actualNullChar() {
     assertFalse(comparer.canCompare('a', Character.MIN_VALUE));
   }
 
@@ -78,12 +78,12 @@ public class DefaultIgnoringComparerTest {
   }
 
   @Test
-  public void canCompare_leftZero() {
+  public void canCompare_expectedZero() {
     assertTrue(comparer.canCompare(0, 1));
   }
 
   @Test
-  public void canCompare_rightZero() {
+  public void canCompare_actualZero() {
     assertFalse(comparer.canCompare(1, 0));
   }
 
@@ -98,7 +98,7 @@ public class DefaultIgnoringComparerTest {
   }
 
   @Test
-  public void canCompare_leftZeroDouble() {
+  public void canCompare_expectedZeroDouble() {
     assertTrue(comparer.canCompare(0d, 1d));
   }
 

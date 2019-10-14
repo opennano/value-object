@@ -27,27 +27,27 @@ public class ValueComparerTest {
   private final class StubValueComparer extends ValueComparer {
 
     @Override
-    public boolean canCompare(Object left, Object right) {
+    public boolean canCompare(Object expected, Object actual) {
       return false;
     }
 
     @Override
     public Diff compare(
-        String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+        String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
       return null;
     }
 
     // overridden for visibility only (test can't directly access protected methods in super)
-    
+
     @Override
     protected Diff createDiff(String path, List<Diff> fieldDiffs, boolean fullDiff) {
       return super.createDiff(path, fieldDiffs, fullDiff);
     }
 
     @Override
-    protected boolean areBothOneOfTheseTypes(Object left, Object right, Class<?>... types) {
-      return super.areBothOneOfTheseTypes(left, right, types);
+    protected boolean areBothOneOfTheseTypes(Object expected, Object actual, Class<?>... types) {
+      return super.areBothOneOfTheseTypes(expected, actual, types);
     }
   }
 
@@ -62,8 +62,8 @@ public class ValueComparerTest {
 
     assertEquals(ParentDiff.class, actual.getClass());
     assertEquals(expected.getPath(), actual.getPath());
-    assertEquals(expected.getLeftValue(), actual.getLeftValue());
-    assertEquals(expected.getRightValue(), actual.getRightValue());
+    assertEquals(expected.getExpectedValue(), actual.getExpectedValue());
+    assertEquals(expected.getActualValue(), actual.getActualValue());
   }
 
   @Test
@@ -103,12 +103,12 @@ public class ValueComparerTest {
   }
 
   @Test
-  public void areBothOneOfTheseTypes_simpleCaseLeftIsNull() {
+  public void areBothOneOfTheseTypes_simpleCaseExpectedIsNull() {
     assertFalse(comparer.areBothOneOfTheseTypes("", null, String.class));
   }
 
   @Test
-  public void areBothOneOfTheseTypes_simpleCaseRightIsNull() {
+  public void areBothOneOfTheseTypes_simpleCaseActualIsNull() {
     assertFalse(comparer.areBothOneOfTheseTypes(null, "", String.class));
   }
 
@@ -141,7 +141,6 @@ public class ValueComparerTest {
 
   @Test
   public void areBothOneOfTheseTypes_multipleTypesIncompatible() {
-    assertFalse(
-        comparer.areBothOneOfTheseTypes("", 1, String.class, Integer.class));
+    assertFalse(comparer.areBothOneOfTheseTypes("", 1, String.class, Integer.class));
   }
 }

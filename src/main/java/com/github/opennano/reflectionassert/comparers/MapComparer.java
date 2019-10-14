@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import com.github.opennano.reflectionassert.diffs.Diff;
 import com.github.opennano.reflectionassert.diffs.MissingValueDiff;
+import com.github.opennano.reflectionassert.diffs.PartialDiff;
 import com.github.opennano.reflectionassert.diffs.UnexpectedValueDiff;
 import com.github.opennano.reflectionassert.worker.ComparerManager;
 import com.github.opennano.reflectionassert.worker.ValueComparer;
@@ -25,47 +26,54 @@ public class MapComparer extends ValueComparer {
 
   /** returns true when both objects are maps. */
   @Override
-  public boolean canCompare(Object left, Object right) {
-    return areBothOneOfTheseTypes(left, right, Map.class);
+  public boolean canCompare(Object expected, Object actual) {
+    return areBothOneOfTheseTypes(expected, actual, Map.class);
   }
 
   /**
    * Compares the given maps by looping over the keys and comparing their values. The keys are
    * compared using standard map semantics (equals and hashcode), while values are compared with
    * reflection.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer used when recursion is necessary on child objects
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
    */
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
     // create copies so we can remove elements.
-    Map<Object, Object> leftMap = new HashMap<>((Map<?, ?>) left);
-    Map<Object, Object> rightMap = new HashMap<>((Map<?, ?>) right);
+    Map<Object, Object> expectedMap = new HashMap<>((Map<?, ?>) expected);
+    Map<Object, Object> actualMap = new HashMap<>((Map<?, ?>) actual);
 
     List<Diff> diffs = new ArrayList<>();
-    for (Iterator<Map.Entry<Object, Object>> leftIter = leftMap.entrySet().iterator();
-        leftIter.hasNext(); ) {
+    for (Iterator<Map.Entry<Object, Object>> expectedIter = expectedMap.entrySet().iterator();
+        expectedIter.hasNext(); ) {
 
-      Map.Entry<Object, Object> leftEntry = leftIter.next();
-      Object leftKey = leftEntry.getKey();
-      Object leftValue = leftEntry.getValue();
-      String childPath = appendKeyToPath(path, leftKey);
+      Map.Entry<Object, Object> expectedEntry = expectedIter.next();
+      Object expectedKey = expectedEntry.getKey();
+      Object expectedValue = expectedEntry.getValue();
+      String childPath = appendKeyToPath(path, expectedKey);
 
-      // remove corresponding match from the right map, if any
-      Object rightValue = rightMap.remove(leftKey);
-      if (rightValue == null) {
-        // left has a key but right doesn't
-        diffs.add(new MissingValueDiff(childPath, leftValue));
+      // remove corresponding match from the actual map, if any
+      Object actualValue = actualMap.remove(expectedKey);
+      if (actualValue == null) {
+        // expected has a key but actual doesn't
+        diffs.add(new MissingValueDiff(childPath, expectedValue));
       } else {
         // key present in both--compare values
-        Diff valueDiff = comparer.getDiff(childPath, leftValue, rightValue, fullDiff);
+        Diff valueDiff = comparer.getDiff(childPath, expectedValue, actualValue, fullDiff);
         if (valueDiff != NULL_TOKEN) {
           diffs.add(valueDiff);
         }
       }
     }
 
-    // any item that matched a left entry has been removed--the rest are unexpected
-    rightMap.entrySet().forEach(entry -> addUnexpectedItemDiff(path, entry, diffs));
+    // any item that matched a expected entry has been removed--the rest are unexpected
+    actualMap.entrySet().forEach(entry -> addUnexpectedItemDiff(path, entry, diffs));
 
     return createDiff(path, diffs, fullDiff);
   }

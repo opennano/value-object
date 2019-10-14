@@ -49,63 +49,61 @@ public class OrderedCollectionComparerTest {
 
   @Test
   public void compare_simpleListsDifferent() {
-    List<Integer> left = Arrays.asList(1);
-    List<Integer> right = Arrays.asList(2);
+    List<Integer> expected = Arrays.asList(1);
+    List<Integer> actual = Arrays.asList(2);
 
     when(mockComparerManager.getDiff("mockPath[0]", 1, 2, true)).thenReturn(mockDiff1);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
     assertEquals(mockDiff1, actualChildren.iterator().next());
   }
 
   @Test
   public void compare_simpleListsSame() {
-    List<Integer> left = Arrays.asList(1);
-    List<Integer> right = Arrays.asList(1);
+    List<Integer> expected = Arrays.asList(1);
+    List<Integer> actual = Arrays.asList(1);
 
     when(mockComparerManager.getDiff("mockPath[0]", 1, 1, true)).thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
-  
-  // FIXME add  test for reordered elements
 
   @Test
   public void compare_missingValue() {
-    List<Integer> left = Arrays.asList(1);
-    List<Integer> right = Collections.emptyList();
+    List<Integer> expected = Arrays.asList(1);
+    List<Integer> actual = Collections.emptyList();
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
-    MissingValueDiff childDiff = (MissingValueDiff) actualChildren.iterator().next();
-    assertEquals("mockPath[0]", childDiff.getPath());
-    assertEquals(1, childDiff.getLeftValue());
-    assertEquals(null, childDiff.getRightValue());
+    MissingValueDiff actualChild = (MissingValueDiff) actualChildren.iterator().next();
+    assertEquals("mockPath[0]", actualChild.getPath());
+    assertEquals(1, actualChild.getExpectedValue());
+    assertEquals(null, actualChild.getActualValue());
   }
 
   @Test
   public void compare_unexpectedValue() {
-    List<Integer> left = Collections.emptyList();
-    List<Integer> right = Arrays.asList(2);
+    List<Integer> expected = Collections.emptyList();
+    List<Integer> actual = Arrays.asList(2);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
-    UnexpectedValueDiff childDiff = (UnexpectedValueDiff) actualChildren.iterator().next();
-    assertEquals("mockPath[0]", childDiff.getPath());
-    assertEquals(null, childDiff.getLeftValue());
-    assertEquals(2, childDiff.getRightValue());
+    UnexpectedValueDiff actualChild = (UnexpectedValueDiff) actualChildren.iterator().next();
+    assertEquals("mockPath[0]", actualChild.getPath());
+    assertEquals(null, actualChild.getExpectedValue());
+    assertEquals(2, actualChild.getActualValue());
   }
 
   @ParameterizedTest
@@ -119,28 +117,28 @@ public class OrderedCollectionComparerTest {
         PriorityQueue.class
       })
   public void compare_allowedCollections(Class<? extends Collection<?>> type) throws Exception {
-    List<?> twoItemList = Arrays.asList(1, 2);
     Constructor<? extends Collection<?>> ctor = type.getConstructor(Collection.class);
-    Collection<?> left = ctor.newInstance(twoItemList);
-    Collection<?> right = twoItemList;
+    List<?> twoItemList = Arrays.asList(1, 2);
+    Collection<?> expected = ctor.newInstance(twoItemList);
+    Collection<?> actual = twoItemList;
 
     when(mockComparerManager.getDiff(anyString(), any(), any(), eq(true))).thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_enumSetIsOrderedToo() {
-    Collection<?> left = EnumSet.allOf(LeniencyMode.class);
-    Collection<?> right = EnumSet.allOf(LeniencyMode.class);
+    Collection<?> expected = EnumSet.allOf(LeniencyMode.class);
+    Collection<?> actual = EnumSet.allOf(LeniencyMode.class);
 
     when(mockComparerManager.getDiff(anyString(), any(), any(), eq(true))).thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @ParameterizedTest
@@ -150,12 +148,12 @@ public class OrderedCollectionComparerTest {
       })
   public void compare_disallowedCollections(Class<? extends Collection<?>> type) throws Exception {
     Constructor<? extends Collection<?>> ctor = type.getConstructor(Collection.class);
-    Collection<?> left = ctor.newInstance(Arrays.asList(IGNORE_DEFAULTS, LENIENT_ORDER));
-    Collection<?> right = Arrays.asList(IGNORE_DEFAULTS, LENIENT_ORDER);
+    Collection<?> expected = ctor.newInstance(Arrays.asList(IGNORE_DEFAULTS, LENIENT_ORDER));
+    Collection<?> actual = Arrays.asList(IGNORE_DEFAULTS, LENIENT_ORDER);
 
     assertThrows(
         ReflectionAssertionInputException.class,
-        () -> comparer.compare("mockPath", left, right, mockComparerManager, true));
+        () -> comparer.compare("mockPath", expected, actual, mockComparerManager, true));
   }
 
   @Test
@@ -167,46 +165,46 @@ public class OrderedCollectionComparerTest {
 
   @Test
   public void compare_unorderedOkWhenOnlyOneItem() {
-    Collection<?> left = new HashSet<>(Arrays.asList(LENIENT_ORDER));
-    Collection<?> right = new HashSet<>(Arrays.asList(LENIENT_ORDER));
+    Collection<?> expected = new HashSet<>(Arrays.asList(LENIENT_ORDER));
+    Collection<?> actual = new HashSet<>(Arrays.asList(LENIENT_ORDER));
 
     when(mockComparerManager.getDiff("mockPath[0]", LENIENT_ORDER, LENIENT_ORDER, true))
         .thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_unorderedOkWhenEmpty() {
-    Collection<?> left = new HashSet<>(0);
-    Collection<?> right = new HashSet<>(0);
+    Collection<?> expected = new HashSet<>(0);
+    Collection<?> actual = new HashSet<>(0);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_emptyLists() {
-    List<Integer> left = Collections.emptyList();
-    List<Integer> right = Collections.emptyList();
+    List<Integer> expected = Collections.emptyList();
+    List<Integer> actual = Collections.emptyList();
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_propagatesPartialFlag() {
-    List<Integer> left = Arrays.asList(1);
-    List<Integer> right = Arrays.asList(1);
+    List<Integer> expected = Arrays.asList(1);
+    List<Integer> actual = Arrays.asList(1);
 
     when(mockComparerManager.getDiff("mockPath[0]", 1, 1, false)).thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, false);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, false);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 }

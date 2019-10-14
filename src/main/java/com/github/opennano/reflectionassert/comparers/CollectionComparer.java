@@ -13,13 +13,22 @@ import com.github.opennano.reflectionassert.worker.ValueComparer;
 /** base class for comparing collections and arrays */
 public abstract class CollectionComparer extends ValueComparer {
 
-  /** returns true when both objects are arrays or collections. */
+  /**
+   * @param expected the expected object
+   * @param actual the actual object
+   * @return true if both objects are arrays or collections.
+   */
   @Override
-  public boolean canCompare(Object left, Object right) {
-    return isBothArrayOrCollection(left, right);
+  public boolean canCompare(Object expected, Object actual) {
+    return isBothArrayOrCollection(expected, actual);
   }
 
-  /** converts the given (possibly primitive) array or collection object to a list of objects */
+  /**
+   * Convert the given (possibly primitive) array or collection object to a list of objects.
+   *
+   * @param object an object that is either a collection or array
+   * @return a new list with the same values as the provided collection or array
+   */
   protected List<?> asNewList(Object object) {
     if (object instanceof Collection) {
       return new ArrayList<>((Collection<?>) object);
@@ -41,11 +50,11 @@ public abstract class CollectionComparer extends ValueComparer {
     return boxedArray;
   }
 
-  private boolean isBothArrayOrCollection(Object left, Object right) {
-    if (left == null || right == null) {
+  private boolean isBothArrayOrCollection(Object expected, Object actual) {
+    if (expected == null || actual == null) {
       return false;
     }
-    return Stream.of(left, right)
+    return Stream.of(expected, actual)
         .allMatch(val -> val instanceof Collection || val.getClass().isArray());
   }
 }

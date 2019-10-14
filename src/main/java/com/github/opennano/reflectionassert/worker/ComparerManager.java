@@ -20,7 +20,9 @@ import com.github.opennano.reflectionassert.comparers.OrderedCollectionComparer;
 import com.github.opennano.reflectionassert.comparers.SimpleComparer;
 import com.github.opennano.reflectionassert.comparers.UnorderedCollectionComparer;
 import com.github.opennano.reflectionassert.diffs.Diff;
-import com.github.opennano.reflectionassert.diffs.Diff.DiffType;
+import static com.github.opennano.reflectionassert.diffs.Diff.DiffType.*;
+import com.github.opennano.reflectionassert.diffs.NullDiff;
+import com.github.opennano.reflectionassert.diffs.PartialDiff;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionInternalException;
 
 /**
@@ -40,47 +42,33 @@ public class ComparerManager {
   }
 
   /**
-   * returns an object containing all diffs detected using a deep reflection comparison between the
-   * left and right values, or a {@link NullDiff#NULL_TOKEN} if none were found
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   * @return an object containing all diffs detected using a deep reflection comparison between the
+   *     expected and actual values, or a {@link NullDiff#NULL_TOKEN} if none were found
    */
-  public Diff getDiff(String path, Object left, Object right, boolean fullDiff) {
+  public Diff getDiff(String path, Object expected, Object actual, boolean fullDiff) {
     // check whether we've already compared these
-    CacheKey key = new CacheKey(left, right);
+    CacheKey key = new CacheKey(expected, actual);
     Diff cachedDiff = getCachedDiff(key, fullDiff);
     if (cachedDiff != null) {
-      // certainly not the most efficient way to do this, but good enough I suppose
+      // not the most efficient way to do this--in theory we shouldn't need new diff objects
+      // definitely more convenient to operate on a full diff tree when we're done though
       return cachedDiff.cloneAndRepath(cachedDiff.getPath(), path);
     }
 
-    // insert a null token for this new key before recursing
-    // this signals that this comparison has been seen before,
-    // if we encounter it again further down the call stack it will return the null token
-    // instead of infinitely recursing (and also means there are no diffs)
+    /* Insert a null token for this new key before recursing
+    signaling that this comparison has been seen before.
+    If we encounter it again further down the call stack then the object graph has a cycle
+    This handles the cycle by returning the null token on the second encounter
+    instead of infinitely recursing (it also means there are no diffs in that part of the tree). */
     cachedDiffs.put(key, NULL_TOKEN);
-    Diff diff = computeDiff(path, left, right, fullDiff);
+    Diff diff = computeDiff(path, expected, actual, fullDiff);
     cachedDiffs.put(key, diff);
     return diff;
-  }
-
-  private Diff getCachedDiff(CacheKey key, boolean fullDiffNeeded) {
-    Diff cachedDiff = cachedDiffs.get(key);
-    return (cachedDiff == null || (fullDiffNeeded && cachedDiff.getType() == DiffType.PARTIAL))
-        ? null
-        : cachedDiff;
-  }
-
-  private Diff computeDiff(String path, Object left, Object right, boolean fullDiff) {
-    return comparerChain
-        .stream()
-        .filter(comp -> comp.canCompare(left, right))
-        .findFirst()
-        .orElseThrow(() -> internalError(left, right))
-        .compare(path, left, right, this, fullDiff);
-  }
-
-  private RuntimeException internalError(Object left, Object right) {
-    String template = "no comparer found for values: left=%s, right=%s";
-    return new ReflectionAssertionInternalException(String.format(template, left, right));
   }
 
   private List<ValueComparer> createComparerChain(Set<LeniencyMode> modes) {
@@ -103,21 +91,42 @@ public class ComparerManager {
     return comparerChain;
   }
 
-  public static final class CacheKey {
-    private final Object left;
-    private final Object right;
+  private Diff getCachedDiff(CacheKey key, boolean fullDiffNeeded) {
+    Diff cachedDiff = cachedDiffs.get(key);
+    return cachedDiff == null || (fullDiffNeeded && cachedDiff.getType() == PARTIAL)
+        ? null
+        : cachedDiff;
+  }
 
-    public CacheKey(Object left, Object right) {
-      this.left = left;
-      this.right = right;
+  private Diff computeDiff(String path, Object expected, Object actual, boolean fullDiff) {
+    return comparerChain
+        .stream()
+        .filter(comp -> comp.canCompare(expected, actual))
+        .findFirst()
+        .orElseThrow(() -> internalError(expected, actual))
+        .compare(path, expected, actual, this, fullDiff);
+  }
+
+  private RuntimeException internalError(Object expected, Object actual) {
+    String template = "no comparer found for values: expected=%s, actual=%s";
+    return new ReflectionAssertionInternalException(String.format(template, expected, actual));
+  }
+
+  public static final class CacheKey {
+    private final Object expected;
+    private final Object actual;
+
+    public CacheKey(Object expected, Object actual) {
+      this.expected = expected;
+      this.actual = actual;
     }
 
     @Override
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + ((left == null) ? 0 : left.hashCode());
-      result = prime * result + ((right == null) ? 0 : right.hashCode());
+      result = prime * result + ((expected == null) ? 0 : expected.hashCode());
+      result = prime * result + ((actual == null) ? 0 : actual.hashCode());
       return result;
     }
 
@@ -130,18 +139,18 @@ public class ComparerManager {
         return false;
       }
       CacheKey other = (CacheKey) obj;
-      if (left == null) {
-        if (other.left != null) {
+      if (expected == null) {
+        if (other.expected != null) {
           return false;
         }
-      } else if (!left.equals(other.left)) {
+      } else if (!expected.equals(other.expected)) {
         return false;
       }
-      if (right == null) {
-        if (other.right != null) {
+      if (actual == null) {
+        if (other.actual != null) {
           return false;
         }
-      } else if (!right.equals(other.right)) {
+      } else if (!actual.equals(other.actual)) {
         return false;
       }
       return true;

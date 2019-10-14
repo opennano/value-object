@@ -2,17 +2,17 @@ package com.github.opennano.reflectionassert.testutils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.lang.reflect.Constructor;
 import java.util.stream.Stream;
 
 public class ExceptionTestUtil {
 
-  private static final String STANDARD_MESSAGE = "message";
+  private static final String STANDARD_MESSAGE = "mock message";
 
   private ExceptionTestUtil() {
-    //no-op: singleton
+    // no-op: singleton
   }
 
   /**
@@ -21,62 +21,46 @@ public class ExceptionTestUtil {
    * and those constructors should delegate to the super type method. If your exception type has
    * additional constructors you will need to test those manually. If your exception type does not
    * follow these conventions or is an inner type, you're on your own :)
+   *
+   * @param <T> the type of Throwable to test
+   * @param type the Class object of the Throwable to test
    */
   public static <T extends Throwable> void assertValidException(Class<T> type) {
-    try {
-      maybeTestNoArgConstructor(type);
-      maybeTestStringConstructor(type);
-      maybeTestThrowableConstructor(type);
-      maybeTestStringAndThrowableConstructor(type);
-    } catch (Exception exception) {
-      String message = "failed to test exception type " + type.getSimpleName();
-      throw new IllegalStateException(message, exception);
-    }
+    maybeTestNoArgConstructor(type);
+    maybeTestStringConstructor(type);
+    maybeTestThrowableConstructor(type);
+    maybeTestStringAndThrowableConstructor(type);
   }
 
   private static <T extends Throwable> void maybeTestNoArgConstructor(Class<T> type) {
     T exception = instantiate(type);
-    if (exception == null) { // no 0-arg constructor
-      return;
-    }
-
-    assertNull(exception.getMessage());
-    assertNull(exception.getCause());
+    maybeTestException(exception, null, null);
   }
 
   private static <T extends Throwable> void maybeTestStringConstructor(Class<T> type) {
     T exception = instantiate(type, STANDARD_MESSAGE);
-    if (exception == null) { // no String-only constructor
-      return;
-    }
-
-    assertEquals(STANDARD_MESSAGE, exception.getMessage());
-    assertNull(exception.getCause());
+    maybeTestException(exception, STANDARD_MESSAGE, null);
   }
 
   private static <T extends Throwable> void maybeTestThrowableConstructor(Class<T> type) {
     Throwable cause = new Throwable();
     T exception = instantiate(type, cause);
-    if (exception == null) { // no Throwable-only constructor
-      return;
-    }
 
-    assertNotNull(exception.getMessage()); //java fills in a default message in this case
-    assertEquals(cause, exception.getCause());
+    // this scenario is a little different than the others
+    // java fills in a default message when no message is specified
+    if (exception != null) {
+      assertNotNull(exception.getMessage());
+      assertSame(cause, exception.getCause());
+    }
   }
 
   private static <T extends Throwable> void maybeTestStringAndThrowableConstructor(Class<T> type) {
     Throwable cause = new Throwable();
     T exception = instantiate(type, STANDARD_MESSAGE, cause);
-    if (exception == null) { // no Throwable-only constructor
-      return;
-    }
-
-    assertEquals(STANDARD_MESSAGE, exception.getMessage());
-    assertEquals(cause, exception.getCause());
+    maybeTestException(exception, STANDARD_MESSAGE, cause);
   }
 
-  /**
+  /*
    * Creates a new instance of the specified type using the provided arguments, defeating any
    * private access modifiers.
    *
@@ -88,16 +72,25 @@ public class ExceptionTestUtil {
     try {
       Class<?>[] types = Stream.of(args).map(Object::getClass).toArray(Class[]::new);
       constructor = type.getConstructor(types);
-    } catch (NoSuchMethodException exception) { //NOSONAR it's fine if this doesn't exist
+    } catch (NoSuchMethodException exception) { // NOSONAR it's fine if this doesn't exist
       return null;
     }
 
     try {
       constructor.setAccessible(true);
       return constructor.newInstance(args);
-    } catch (Exception exception) {
+    } catch (Exception e) {
       String message = "failed to instantiate exception class by constructor";
-      throw new IllegalArgumentException(message, exception);
+      throw new IllegalArgumentException(message, e);
+    }
+  }
+
+  private static void maybeTestException(
+      Throwable exception, String expectedMessage, Throwable expectedCause) {
+
+    if (exception != null) {
+      assertEquals(expectedMessage, exception.getMessage());
+      assertSame(expectedCause, exception.getCause());
     }
   }
 }

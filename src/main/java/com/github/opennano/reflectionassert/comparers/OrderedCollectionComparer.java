@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import com.github.opennano.reflectionassert.diffs.Diff;
 import com.github.opennano.reflectionassert.diffs.MissingValueDiff;
+import com.github.opennano.reflectionassert.diffs.PartialDiff;
 import com.github.opennano.reflectionassert.diffs.UnexpectedValueDiff;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionInputException;
 import com.github.opennano.reflectionassert.worker.ComparerManager;
@@ -27,25 +28,35 @@ public class OrderedCollectionComparer extends CollectionComparer {
 
   private static final String PROPERTY_PATH_TEMPLATE = "%s[%s]";
 
+  /**
+   * Compare the given collections or arrays by comparing each element by index.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer used when recursion is necessary on child objects
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   */
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
-    assertAllOrdered(left, right);
-    List<?> leftList = asNewList(left);
-    List<?> rightList = asNewList(right);
+    assertAllOrdered(expected, actual);
+    List<?> expectedList = asNewList(expected);
+    List<?> actualList = asNewList(actual);
 
     // compare each item by index, reporting a diff if one exists
 
     int index = 0;
     List<Diff> diffs = new ArrayList<>();
-    Iterator<?> leftIterator = leftList.iterator();
-    Iterator<?> rightIterator = rightList.iterator();
-    while (leftIterator.hasNext() && rightIterator.hasNext()) {
-      Object leftItem = leftIterator.next();
-      Object rightItem = rightIterator.next();
+    Iterator<?> expectedIterator = expectedList.iterator();
+    Iterator<?> actualIterator = actualList.iterator();
+    while (expectedIterator.hasNext() && actualIterator.hasNext()) {
+      Object expectedItem = expectedIterator.next();
+      Object actualItem = actualIterator.next();
       String elementPath = appendIndexToPath(path, index);
-      Diff itemDiff = comparer.getDiff(elementPath, leftItem, rightItem, fullDiff);
+      Diff itemDiff = comparer.getDiff(elementPath, expectedItem, actualItem, fullDiff);
       if (itemDiff != NULL_TOKEN) {
         diffs.add(itemDiff);
       }
@@ -53,17 +64,17 @@ public class OrderedCollectionComparer extends CollectionComparer {
     }
 
     // check for "extra" elements in either collection
-    // maybe the left has more or the right has more, but never both
-    while (leftIterator.hasNext()) {
-      Object leftItem = leftIterator.next();
+    // maybe the expected has more or the actual has more, but never both
+    while (expectedIterator.hasNext()) {
+      Object expectedItem = expectedIterator.next();
       String elementPath = appendIndexToPath(path, index);
-      diffs.add(new MissingValueDiff(elementPath, leftItem));
+      diffs.add(new MissingValueDiff(elementPath, expectedItem));
       index++;
     }
-    while (rightIterator.hasNext()) {
-      Object rightItem = rightIterator.next();
+    while (actualIterator.hasNext()) {
+      Object actualItem = actualIterator.next();
       String elementPath = appendIndexToPath(path, index);
-      diffs.add(new UnexpectedValueDiff(elementPath, rightItem));
+      diffs.add(new UnexpectedValueDiff(elementPath, actualItem));
       index++;
     }
 

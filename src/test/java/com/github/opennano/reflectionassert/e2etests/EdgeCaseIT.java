@@ -157,9 +157,9 @@ public class EdgeCaseIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_canCompareAnyNumericTypes() {
     List<Number> numbers = Arrays.asList((byte) 1, (short) 1, 1, 1l, 1f, 1d);
-    for (Number left : numbers) {
-      for (Number right : numbers) {
-        assertReflectionEquals(left, right);
+    for (Number expected : numbers) {
+      for (Number actual : numbers) {
+        assertReflectionEquals(expected, actual);
       }
     }
   }
@@ -180,7 +180,7 @@ public class EdgeCaseIT extends BaseIntegrationTest {
   public void assertReflectionEquals_customErrorMessage() {
     Class<ReflectionAssertionException> type = ReflectionAssertionException.class;
     Throwable thrown = assertThrows(type, () -> assertReflectionEquals("mock message", 1, 2));
-    
+
     String message = thrown.getMessage();
     assertTrue(message.startsWith("mock message"));
   }

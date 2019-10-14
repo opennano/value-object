@@ -6,8 +6,8 @@ package com.github.opennano.reflectionassert.diffs;
  */
 public final class UnexpectedValueDiff extends Diff {
 
-  public UnexpectedValueDiff(String path, Object right) {
-    super(path, null, right);
+  public UnexpectedValueDiff(String path, Object actual) {
+    super(path, null, actual);
   }
 
   @Override

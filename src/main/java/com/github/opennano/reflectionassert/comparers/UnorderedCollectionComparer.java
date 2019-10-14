@@ -8,12 +8,13 @@ import java.util.List;
 
 import com.github.opennano.reflectionassert.diffs.Diff;
 import com.github.opennano.reflectionassert.diffs.MissingValueDiff;
+import com.github.opennano.reflectionassert.diffs.PartialDiff;
 import com.github.opennano.reflectionassert.diffs.UnexpectedValueDiff;
 import com.github.opennano.reflectionassert.worker.ComparerManager;
 
 /**
  * Compares collections and arrays. Since order doesn't matter diffs can't be strictly computed.
- * Diffs typically are presented as a pair of unmatched left and right elements.
+ * Diffs typically are presented as a pair of unmatched expected and actual elements.
  *
  * <p>Compared to an {@link OrderedCollectionComparer} performance of this comparer is far
  * worse--O(n^2) versus O(n).
@@ -24,26 +25,36 @@ public class UnorderedCollectionComparer extends CollectionComparer {
 
   private static final String PROPERTY_PATH_TEMPLATE = "%s[*]";
 
-  /** compares the given collections or arrays */
+  /**
+   * Compare the given collections or arrays, ignoring element order.
+   *
+   * @param path the path so far (from root down to the objects being compared)
+   * @param expected the expected object
+   * @param actual the actual object
+   * @param comparer used when recursion is necessary on child objects
+   * @param fullDiff when false comparison should end at the first found difference, in which case a
+   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   */
   @Override
   public Diff compare(
-      String path, Object left, Object right, ComparerManager comparer, boolean fullDiff) {
+      String path, Object expected, Object actual, ComparerManager comparer, boolean fullDiff) {
 
     // wrap in a new list for convenience
-    List<?> leftList = asNewList(left);
-    List<?> rightList = asNewList(right);
+    List<?> expectedList = asNewList(expected);
+    List<?> actualList = asNewList(actual);
 
     String elementPath = appendIndexToPath(path);
     // compare all pairs of items in each collection, removing any that match
-    for (Iterator<?> leftIterator = leftList.iterator();
-        leftIterator.hasNext() && !rightList.isEmpty(); ) {
+    for (Iterator<?> expectedIterator = expectedList.iterator();
+        expectedIterator.hasNext() && !actualList.isEmpty(); ) {
 
-      Object leftItem = leftIterator.next();
-      for (Iterator<?> rightIterator = rightList.iterator(); rightIterator.hasNext(); ) {
-        if (comparer.getDiff(elementPath, leftItem, rightIterator.next(), false) == NULL_TOKEN) {
+      Object expectedItem = expectedIterator.next();
+      for (Iterator<?> actualIterator = actualList.iterator(); actualIterator.hasNext(); ) {
+        if (comparer.getDiff(elementPath, expectedItem, actualIterator.next(), false)
+            == NULL_TOKEN) {
           // found matching element--remove from both collections
-          leftIterator.remove();
-          rightIterator.remove();
+          expectedIterator.remove();
+          actualIterator.remove();
           break;
         }
       }
@@ -51,8 +62,8 @@ public class UnorderedCollectionComparer extends CollectionComparer {
 
     // all remaining elements are either missing or unexpected and are reported as diffs
     List<Diff> diffs = new ArrayList<>();
-    leftList.forEach(item -> diffs.add(new MissingValueDiff(elementPath, item)));
-    rightList.forEach(item -> diffs.add(new UnexpectedValueDiff(elementPath, item)));
+    expectedList.forEach(item -> diffs.add(new MissingValueDiff(elementPath, item)));
+    actualList.forEach(item -> diffs.add(new UnexpectedValueDiff(elementPath, item)));
 
     return createDiff(path, diffs, fullDiff);
   }

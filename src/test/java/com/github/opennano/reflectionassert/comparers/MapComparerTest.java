@@ -4,6 +4,7 @@ import static com.github.opennano.reflectionassert.diffs.NullDiff.NULL_TOKEN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,11 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.github.opennano.reflectionassert.comparers.MapComparer;
 import com.github.opennano.reflectionassert.diffs.Diff;
 import com.github.opennano.reflectionassert.diffs.MissingValueDiff;
 import com.github.opennano.reflectionassert.diffs.ParentDiff;
@@ -36,12 +35,12 @@ public class MapComparerTest {
   @Mock private Object mockValue2;
 
   @Test
-  public void canCompare_leftNull() {
+  public void canCompare_expectedNull() {
     assertFalse(comparer.canCompare(null, new HashMap<>()));
   }
 
   @Test
-  public void canCompare_rightNull() {
+  public void canCompare_actualNull() {
     assertFalse(comparer.canCompare(new HashMap<>(), null));
   }
 
@@ -72,107 +71,107 @@ public class MapComparerTest {
 
   @Test
   public void compare_differentValues() {
-    Map<?, ?> left = mapOf("x", mockValue1);
-    Map<?, ?> right = mapOf("x", mockValue2);
+    Map<?, ?> expected = mapOf("x", mockValue1);
+    Map<?, ?> actual = mapOf("x", mockValue2);
     when(mockComparerManager.getDiff("mockPath{x}", mockValue1, mockValue2, true))
         .thenReturn(mockDiff1);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
     assertEquals(mockDiff1, actualChildren.iterator().next());
   }
 
   @Test
   public void compare_same() {
-    Map<?, ?> left = mapOf("x", mockValue1);
-    Map<?, ?> right = mapOf("x", mockValue2);
+    Map<?, ?> expected = mapOf("x", mockValue1);
+    Map<?, ?> actual = mapOf("x", mockValue2);
     when(mockComparerManager.getDiff("mockPath{x}", mockValue1, mockValue2, true))
         .thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_empty() {
-    Map<?, ?> left = mapOf();
-    Map<?, ?> right = mapOf();
+    Map<?, ?> expected = mapOf();
+    Map<?, ?> actual = mapOf();
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_missingOne() {
-    Map<?, ?> left = mapOf("x", mockValue1);
-    Map<?, ?> right = mapOf();
+    Map<?, ?> expected = mapOf("x", mockValue1);
+    Map<?, ?> actual = mapOf();
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
-    MissingValueDiff actualDiff = (MissingValueDiff) actualChildren.iterator().next();
-    assertEquals("mockPath{x}", actualDiff.getPath());
-    assertEquals(mockValue1, actualDiff.getLeftValue());
-    assertEquals(null, actualDiff.getRightValue());
+    MissingValueDiff actualChild = (MissingValueDiff) actualChildren.iterator().next();
+    assertEquals("mockPath{x}", actualChild.getPath());
+    assertEquals(mockValue1, actualChild.getExpectedValue());
+    assertEquals(null, actualChild.getActualValue());
   }
 
   @Test
   public void compare_unexpectedOne() {
-    Map<?, ?> left = mapOf();
-    Map<?, ?> right = mapOf("x", mockValue2);
+    Map<?, ?> expected = mapOf();
+    Map<?, ?> actual = mapOf("x", mockValue2);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
-    UnexpectedValueDiff actualDiff = (UnexpectedValueDiff) actualChildren.iterator().next();
-    assertEquals("mockPath{x}", actualDiff.getPath());
-    assertEquals(null, actualDiff.getLeftValue());
-    assertEquals(mockValue2, actualDiff.getRightValue());
+    UnexpectedValueDiff actualChild = (UnexpectedValueDiff) actualChildren.iterator().next();
+    assertEquals("mockPath{x}", actualChild.getPath());
+    assertEquals(null, actualChild.getExpectedValue());
+    assertEquals(mockValue2, actualChild.getActualValue());
   }
 
   @Test
   public void compare_mismatchedKeys() {
-    Map<?, ?> left = mapOf("x", mockValue1);
-    Map<?, ?> right = mapOf("y", mockValue2);
+    Map<?, ?> expected = mapOf("x", mockValue1);
+    Map<?, ?> actual = mapOf("y", mockValue2);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(2, actualChildren.size());
   }
 
   @Test
   public void compare_propagatesPartialFlag() {
-    Map<?, ?> left = mapOf("x", mockValue1);
-    Map<?, ?> right = mapOf("x", mockValue2);
+    Map<?, ?> expected = mapOf("x", mockValue1);
+    Map<?, ?> actual = mapOf("x", mockValue2);
     when(mockComparerManager.getDiff("mockPath{x}", mockValue1, mockValue2, false))
         .thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, false);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, false);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_noPath() {
-    Map<?, ?> left = mapOf("x", mockValue1);
-    Map<?, ?> right = mapOf("x", mockValue2);
+    Map<?, ?> expected = mapOf("x", mockValue1);
+    Map<?, ?> actual = mapOf("x", mockValue2);
     when(mockComparerManager.getDiff("mockPath{x}", mockValue1, mockValue2, false))
         .thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, false);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, false);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   protected Map<?, ?> mapOf(Object... keysAndValues) {

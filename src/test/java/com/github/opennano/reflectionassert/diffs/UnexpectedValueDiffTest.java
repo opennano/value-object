@@ -22,8 +22,8 @@ public class UnexpectedValueDiffTest {
   public void assertConstructorAndGettersAreValid() {
     Diff diff = new UnexpectedValueDiff("mockPath", mockValue);
     assertEquals("mockPath", diff.getPath());
-    assertNull(diff.getLeftValue());
-    assertSame(mockValue, diff.getRightValue());
+    assertNull(diff.getExpectedValue());
+    assertSame(mockValue, diff.getActualValue());
   }
 
   @Test

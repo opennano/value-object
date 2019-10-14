@@ -50,12 +50,12 @@ public class ObjectComparerTest {
   @Mock private Object mockValue2;
 
   @Test
-  public void canCompare_leftNull() {
+  public void canCompare_expectedNull() {
     assertFalse(comparer.canCompare(null, new SimpleObject("x")));
   }
 
   @Test
-  public void canCompare_rightNull() {
+  public void canCompare_actualNull() {
     assertFalse(comparer.canCompare(new SimpleObject("x"), null));
   }
 
@@ -71,81 +71,81 @@ public class ObjectComparerTest {
 
   @Test
   public void compare_differentValues() {
-    SimpleObject left = new SimpleObject("x");
-    SimpleObject right = new SimpleObject("y");
+    SimpleObject expected = new SimpleObject("x");
+    SimpleObject actual = new SimpleObject("y");
 
     when(mockComparerManager.getDiff("mockPath.testedField", "x", "y", true)).thenReturn(mockDiff1);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
     assertEquals(mockDiff1, actualChildren.iterator().next());
   }
 
   @Test
   public void compare_same() {
-    SimpleObject left = new SimpleObject("x");
-    SimpleObject right = new SimpleObject("x");
+    SimpleObject expected = new SimpleObject("x");
+    SimpleObject actual = new SimpleObject("x");
 
     when(mockComparerManager.getDiff("mockPath.testedField", "x", "x", true))
         .thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_rootPath() {
-    SimpleObject left = new SimpleObject("x");
-    SimpleObject right = new SimpleObject("y");
+    SimpleObject expected = new SimpleObject("x");
+    SimpleObject actual = new SimpleObject("y");
 
     when(mockComparerManager.getDiff("$testedField", "x", "y", true)).thenReturn(mockDiff1);
 
-    Diff actual = comparer.compare("$", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("$", expected, actual, mockComparerManager, true);
 
-    assertEquals(ParentDiff.class, actual.getClass());
-    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actual, "childDiffs");
+    assertEquals(ParentDiff.class, actualDiff.getClass());
+    List<?> actualChildren = (List<?>) ReflectionTestUtils.getField(actualDiff, "childDiffs");
     assertEquals(1, actualChildren.size());
     assertEquals(mockDiff1, actualChildren.iterator().next());
   }
 
   @Test
   public void compare_actualIsSubtype() {
-    Object left = new Object();
-    SimpleObject right = new SimpleObject("y");
+    Object expected = new Object();
+    SimpleObject actual = new SimpleObject("y");
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
   public void compare_actualIsSupertype() {
-    SimpleObject left = new SimpleObject("y");
-    Object right = new Object();
+    SimpleObject expected = new SimpleObject("y");
+    Object actual = new Object();
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, true);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, true);
 
-    assertEquals(SimpleDiff.class, actual.getClass());
-    assertEquals("mockPath", actual.getPath());
-    assertEquals(SimpleObject.class, actual.getLeftValue());
-    assertEquals(Object.class, actual.getRightValue());
+    assertEquals(SimpleDiff.class, actualDiff.getClass());
+    assertEquals("mockPath", actualDiff.getPath());
+    assertEquals(SimpleObject.class, actualDiff.getExpectedValue());
+    assertEquals(Object.class, actualDiff.getActualValue());
   }
 
   @Test
   public void compare_propagatesPartialFlag() {
-    SimpleObject left = new SimpleObject("x");
-    SimpleObject right = new SimpleObject("x");
+    SimpleObject expected = new SimpleObject("x");
+    SimpleObject actual = new SimpleObject("x");
 
     when(mockComparerManager.getDiff("mockPath.testedField", "x", "x", false))
         .thenReturn(NULL_TOKEN);
 
-    Diff actual = comparer.compare("mockPath", left, right, mockComparerManager, false);
+    Diff actualDiff = comparer.compare("mockPath", expected, actual, mockComparerManager, false);
 
-    assertEquals(NULL_TOKEN, actual);
+    assertEquals(NULL_TOKEN, actualDiff);
   }
 
   @Test
