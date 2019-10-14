@@ -24,7 +24,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_stringValuesDifferent() {
-    assertComparisonThrowsWithMessage("x", "y", "", "\"x\"", "\"y\"");
+    assertComparisonThrowsWithMessage("x", "y", "$", "\"x\"", "\"y\"");
   }
 
   @Test
@@ -34,17 +34,17 @@ public class SimpleValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_stringValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage("x", null, "", "\"x\"", "null");
+    assertComparisonThrowsWithMessage("x", null, "$", "\"x\"", "null");
   }
 
   @Test
   public void assertReflectionEquals_stringValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage("x", null, "", "\"x\"", "null", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage("x", null, "$", "\"x\"", "null", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_stringValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(null, "x", "", "null", "\"x\"");
+    assertComparisonThrowsWithMessage(null, "x", "$", "null", "\"x\"");
   }
 
   @Test
@@ -58,7 +58,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
   public void assertReflectionEquals_dateValuesDifferent() {
     // use date objects as its toString returns different values depending on time zone
     assertComparisonThrowsWithMessage(
-        new Date(1), new Date(2), "", new Date(1).toString(), new Date(0).toString());
+        new Date(1), new Date(2), "$", new Date(1).toString(), new Date(0).toString());
   }
 
   @Test
@@ -70,21 +70,21 @@ public class SimpleValueIT extends BaseIntegrationTest {
   public void assertReflectionEquals_dateValuesDefaultActualIgnored() {
     // use date object as its toString returns different values depending on time zone
     assertComparisonThrowsWithMessage(
-        new Date(1), null, "", new Date(1).toString(), "null", LENIENT_DATES);
+        new Date(1), null, "$", new Date(1).toString(), "null", LENIENT_DATES);
   }
 
   @Test
   public void assertReflectionEquals_dateValuesDefaultActualIgnoredLenient() {
     // use date object as its toString returns different values depending on time zone
     assertComparisonThrowsWithMessage(
-        new Date(1), null, "", new Date(1).toString(), "null", LENIENT_DATES, IGNORE_DEFAULTS);
+        new Date(1), null, "$", new Date(1).toString(), "null", LENIENT_DATES, IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_dateValuesDefaultExpectedIgnored() {
     // use date object as its toString returns different values depending on time zone
     assertComparisonThrowsWithMessage(
-        null, new Date(1), "", "null", new Date(1).toString(), LENIENT_DATES);
+        null, new Date(1), "$", "null", new Date(1).toString(), LENIENT_DATES);
   }
 
   @Test
@@ -100,7 +100,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         calendarFromMillis(1),
         calendarFromMillis(2),
-        "",
+        "$",
         calendarFromMillis(1).toString(),
         calendarFromMillis(2).toString());
   }
@@ -114,7 +114,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
   public void assertReflectionEquals_calendarValuesDefaultActualIgnored() {
     // use calendar object as its toString returns different values depending on time zone
     assertComparisonThrowsWithMessage(
-        calendarFromMillis(1), null, "", calendarFromMillis(1).toString(), "null", LENIENT_DATES);
+        calendarFromMillis(1), null, "$", calendarFromMillis(1).toString(), "null", LENIENT_DATES);
   }
 
   @Test
@@ -123,7 +123,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         calendarFromMillis(1),
         null,
-        "",
+        "$",
         calendarFromMillis(1).toString(),
         "null",
         LENIENT_DATES,
@@ -134,7 +134,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
   public void assertReflectionEquals_calendarValuesDefaultExpectedIgnored() {
     // use calendar object as its toString returns different values depending on time zone
     assertComparisonThrowsWithMessage(
-        null, calendarFromMillis(1), "", "null", calendarFromMillis(1).toString(), LENIENT_DATES);
+        null, calendarFromMillis(1), "$", "null", calendarFromMillis(1).toString(), LENIENT_DATES);
   }
 
   @Test
@@ -153,7 +153,7 @@ public class SimpleValueIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_enumValuesDifferent() {
     assertComparisonThrowsWithMessage(
-        LENIENT_ORDER, IGNORE_DEFAULTS, "", "LENIENT_ORDER", "IGNORE_DEFAULTS");
+        LENIENT_ORDER, IGNORE_DEFAULTS, "$", "LENIENT_ORDER", "IGNORE_DEFAULTS");
   }
 
   @Test
@@ -163,18 +163,18 @@ public class SimpleValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_enumValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(LENIENT_ORDER, null, "", "LENIENT_ORDER", "null");
+    assertComparisonThrowsWithMessage(LENIENT_ORDER, null, "$", "LENIENT_ORDER", "null");
   }
 
   @Test
   public void assertReflectionEquals_enumValuesDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        LENIENT_ORDER, null, "", "LENIENT_ORDER", "null", IGNORE_DEFAULTS);
+        LENIENT_ORDER, null, "$", "LENIENT_ORDER", "null", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_enumValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(null, LENIENT_ORDER, "", "null", "LENIENT_ORDER");
+    assertComparisonThrowsWithMessage(null, LENIENT_ORDER, "$", "null", "LENIENT_ORDER");
   }
 
   @Test
@@ -194,24 +194,24 @@ public class SimpleValueIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new File("some/path"),
         new File("some/other/path"),
-        "",
+        "$",
         "File<some/path>",
         "File<some/other/path>");
   }
 
   @Test
   public void assertReflectionEquals_fileValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(new File("some/path"), null, "", "File<some/path>", "null");
+    assertComparisonThrowsWithMessage(new File("some/path"), null, "$", "File<some/path>", "null");
   }
 
   @Test
   public void assertReflectionEquals_fileValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage(new File("some/path"), null, "", "File<some/path>", "null");
+    assertComparisonThrowsWithMessage(new File("some/path"), null, "$", "File<some/path>", "null");
   }
 
   @Test
   public void assertReflectionEquals_fileValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(null, new File("some/path"), "", "null", "File<some/path>");
+    assertComparisonThrowsWithMessage(null, new File("some/path"), "$", "null", "File<some/path>");
   }
 
   @Test

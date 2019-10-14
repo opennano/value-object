@@ -22,17 +22,17 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_booleanValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(true, false, "", "true", "false");
+    assertComparisonThrowsWithMessage(true, false, "$", "true", "false");
   }
 
   @Test
   public void assertReflectionEquals_booleanValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage(true, false, "", "true", "false", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage(true, false, "$", "true", "false", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_booleanValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(false, true, "", "false", "true");
+    assertComparisonThrowsWithMessage(false, true, "$", "false", "true");
   }
 
   @Test
@@ -49,7 +49,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_charValuesDifferent() {
-    assertComparisonThrowsWithMessage('a', 'b', "", "'a'", "'b'");
+    assertComparisonThrowsWithMessage('a', 'b', "$", "'a'", "'b'");
   }
 
   @Test
@@ -59,18 +59,18 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_charValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage('a', Character.MIN_VALUE, "", "'a'", "'\u0000'");
+    assertComparisonThrowsWithMessage('a', Character.MIN_VALUE, "$", "'a'", "'\u0000'");
   }
 
   @Test
   public void assertReflectionEquals_charValuesDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        'a', Character.MIN_VALUE, "", "'a'", "'\u0000'", IGNORE_DEFAULTS);
+        'a', Character.MIN_VALUE, "$", "'a'", "'\u0000'", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_charValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(Character.MIN_VALUE, 'a', "", "'\u0000'", "'a'");
+    assertComparisonThrowsWithMessage(Character.MIN_VALUE, 'a', "$", "'\u0000'", "'a'");
   }
 
   @Test
@@ -87,7 +87,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_byteValuesDifferent() {
-    assertComparisonThrowsWithMessage((byte) 1, (byte) 2, "", "1", "2");
+    assertComparisonThrowsWithMessage((byte) 1, (byte) 2, "$", "1", "2");
   }
 
   @Test
@@ -97,17 +97,17 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_byteValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage((byte) 1, (byte) 0, "", "1", "0");
+    assertComparisonThrowsWithMessage((byte) 1, (byte) 0, "$", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_byteValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage((byte) 1, (byte) 0, "", "1", "0", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage((byte) 1, (byte) 0, "$", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_byteValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage((byte) 0, (byte) 1, "", "0", "1");
+    assertComparisonThrowsWithMessage((byte) 0, (byte) 1, "$", "0", "1");
   }
 
   @Test
@@ -124,7 +124,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_shortValuesDifferent() {
-    assertComparisonThrowsWithMessage((short) 1, (short) 2, "", "1", "2");
+    assertComparisonThrowsWithMessage((short) 1, (short) 2, "$", "1", "2");
   }
 
   @Test
@@ -134,17 +134,17 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_shortValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage((short) 1, (short) 0, "", "1", "0");
+    assertComparisonThrowsWithMessage((short) 1, (short) 0, "$", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_shortValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage((short) 1, (short) 0, "", "1", "0", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage((short) 1, (short) 0, "$", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_shortValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage((short) 0, (short) 1, "", "0", "1");
+    assertComparisonThrowsWithMessage((short) 0, (short) 1, "$", "0", "1");
   }
 
   @Test
@@ -161,7 +161,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_intValuesDifferent() {
-    assertComparisonThrowsWithMessage(1, 2, "", "1", "2");
+    assertComparisonThrowsWithMessage(1, 2, "$", "1", "2");
   }
 
   @Test
@@ -171,17 +171,17 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_intValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(1, 0, "", "1", "0");
+    assertComparisonThrowsWithMessage(1, 0, "$", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_intValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage(1, 0, "", "1", "0", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage(1, 0, "$", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_intValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(0, 1, "", "0", "1");
+    assertComparisonThrowsWithMessage(0, 1, "$", "0", "1");
   }
 
   @Test
@@ -198,7 +198,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_longValuesDifferent() {
-    assertComparisonThrowsWithMessage(1, 2, "", "1", "2");
+    assertComparisonThrowsWithMessage(1, 2, "$", "1", "2");
   }
 
   @Test
@@ -208,17 +208,17 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_longValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(1l, 0l, "", "1", "0");
+    assertComparisonThrowsWithMessage(1l, 0l, "$", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_longValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage(1l, 0l, "", "1", "0", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage(1l, 0l, "$", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_longValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(0l, 1l, "", "0", "1");
+    assertComparisonThrowsWithMessage(0l, 1l, "$", "0", "1");
   }
 
   @Test
@@ -235,7 +235,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_floatValuesDifferent() {
-    assertComparisonThrowsWithMessage(1f, 2f, "", "1.0", "2.0");
+    assertComparisonThrowsWithMessage(1f, 2f, "$", "1.0", "2.0");
   }
 
   @Test
@@ -245,17 +245,17 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_floatValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(1f, 0f, "", "1.0", "0.0");
+    assertComparisonThrowsWithMessage(1f, 0f, "$", "1.0", "0.0");
   }
 
   @Test
   public void assertReflectionEquals_floatValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage(1f, 0f, "", "1.0", "0.0", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage(1f, 0f, "$", "1.0", "0.0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_floatValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(0f, 1f, "", "0.0", "1.0");
+    assertComparisonThrowsWithMessage(0f, 1f, "$", "0.0", "1.0");
   }
 
   @Test
@@ -272,7 +272,7 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_doubleValuesDifferent() {
-    assertComparisonThrowsWithMessage(1d, 2d, "", "1.0", "2.0");
+    assertComparisonThrowsWithMessage(1d, 2d, "$", "1.0", "2.0");
   }
 
   @Test
@@ -282,25 +282,21 @@ public class PrimitiveValueIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_doubleValuesDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(1d, 0d, "", "1.0", "0.0");
+    assertComparisonThrowsWithMessage(1d, 0d, "$", "1.0", "0.0");
   }
 
   @Test
   public void assertReflectionEquals_doubleValuesDefaultActualLenient() {
-    assertComparisonThrowsWithMessage(1d, 0d, "", "1.0", "0.0", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage(1d, 0d, "$", "1.0", "0.0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_doubleValuesDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(0d, 1d, "", "0.0", "1.0");
+    assertComparisonThrowsWithMessage(0d, 1d, "$", "0.0", "1.0");
   }
 
   @Test
   public void assertReflectionEquals_doubleValuesDefaultExpectedLenient() {
     assertReflectionEquals(0d, 1d, IGNORE_DEFAULTS);
   }
-
-  // end tests
-
-  // utility methods for testing
 }
