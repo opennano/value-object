@@ -16,7 +16,7 @@ import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionExcept
 
 public abstract class BaseIntegrationTest {
 
-  private static final String PATH_MESSAGE_TEMPLATE = "\nPath:       $%s\n";
+  private static final String PATH_MESSAGE_TEMPLATE = "\nPath:       %s\n";
   private static final String EXPECTED_MESSAGE_TEMPLATE = "\nExpected:   %s\n";
   private static final String ACTUAL_MESSAGE_TEMPLATE = "\nActual:     %s\n";
   private static final String UNEXPECTED_MESSAGE_TEMPLATE = "Unexpected: %s\n";
@@ -42,7 +42,7 @@ public abstract class BaseIntegrationTest {
 
     List<String> errors = new ArrayList<>(3);
     if (!message.contains(String.format(PATH_MESSAGE_TEMPLATE, path))) {
-      errors.add("didn't find expected property path: $" + path);
+      errors.add("didn't find expected property path: " + path);
     }
 
     if (expected != null && actual != null) {

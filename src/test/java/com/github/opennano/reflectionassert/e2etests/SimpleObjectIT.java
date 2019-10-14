@@ -38,7 +38,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_booleansDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new BooleanObject(true), new BooleanObject(false), "testedField", "true", "false");
+        new BooleanObject(true), new BooleanObject(false), "$.testedField", "true", "false");
   }
 
   @Test
@@ -46,7 +46,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new BooleanObject(true),
         new BooleanObject(false),
-        "testedField",
+        "$.testedField",
         "true",
         "false",
         IGNORE_DEFAULTS);
@@ -55,7 +55,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_booleansDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new BooleanObject(false), new BooleanObject(true), "testedField", "false", "true");
+        new BooleanObject(false), new BooleanObject(true), "$.testedField", "false", "true");
   }
 
   @Test
@@ -73,7 +73,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_charsDifferent() {
     assertComparisonThrowsWithMessage(
-        new CharObject('a'), new CharObject('b'), "testedField", "'a'", "'b'");
+        new CharObject('a'), new CharObject('b'), "$.testedField", "'a'", "'b'");
   }
 
   @Test
@@ -85,7 +85,11 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_charsDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new CharObject('a'), new CharObject(Character.MIN_VALUE), "testedField", "'a'", "'\u0000'");
+        new CharObject('a'),
+        new CharObject(Character.MIN_VALUE),
+        "$.testedField",
+        "'a'",
+        "'\u0000'");
   }
 
   @Test
@@ -93,7 +97,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new CharObject('a'),
         new CharObject(Character.MIN_VALUE),
-        "testedField",
+        "$.testedField",
         "'a'",
         "'\u0000'",
         IGNORE_DEFAULTS);
@@ -102,7 +106,11 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_charsDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new CharObject(Character.MIN_VALUE), new CharObject('a'), "testedField", "'\u0000'", "'a'");
+        new CharObject(Character.MIN_VALUE),
+        new CharObject('a'),
+        "$.testedField",
+        "'\u0000'",
+        "'a'");
   }
 
   @Test
@@ -121,7 +129,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_bytesDifferent() {
     assertComparisonThrowsWithMessage(
-        new ByteObject((byte) 1), new ByteObject((byte) 2), "testedField", "1", "2");
+        new ByteObject((byte) 1), new ByteObject((byte) 2), "$.testedField", "1", "2");
   }
 
   @Test
@@ -132,7 +140,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_bytesDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new ByteObject((byte) 1), new ByteObject((byte) 0), "testedField", "1", "0");
+        new ByteObject((byte) 1), new ByteObject((byte) 0), "$.testedField", "1", "0");
   }
 
   @Test
@@ -140,7 +148,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new ByteObject((byte) 1),
         new ByteObject((byte) 0),
-        "testedField",
+        "$.testedField",
         "1",
         "0",
         IGNORE_DEFAULTS);
@@ -149,7 +157,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_bytesDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new ByteObject((byte) 0), new ByteObject((byte) 1), "testedField", "0", "1");
+        new ByteObject((byte) 0), new ByteObject((byte) 1), "$.testedField", "0", "1");
   }
 
   @Test
@@ -167,7 +175,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_shortsDifferent() {
     assertComparisonThrowsWithMessage(
-        new ShortObject((short) 1), new ShortObject((short) 2), "testedField", "1", "2");
+        new ShortObject((short) 1), new ShortObject((short) 2), "$.testedField", "1", "2");
   }
 
   @Test
@@ -178,7 +186,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_shortsDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new ShortObject((short) 1), new ShortObject((short) 0), "testedField", "1", "0");
+        new ShortObject((short) 1), new ShortObject((short) 0), "$.testedField", "1", "0");
   }
 
   @Test
@@ -186,7 +194,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new ShortObject((short) 1),
         new ShortObject((short) 0),
-        "testedField",
+        "$.testedField",
         "1",
         "0",
         IGNORE_DEFAULTS);
@@ -195,7 +203,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_shortsDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new ShortObject((short) 0), new ShortObject((short) 1), "testedField", "0", "1");
+        new ShortObject((short) 0), new ShortObject((short) 1), "$.testedField", "0", "1");
   }
 
   @Test
@@ -212,7 +220,8 @@ public class SimpleObjectIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_intsDifferent() {
-    assertComparisonThrowsWithMessage(new IntObject(1), new IntObject(2), "testedField", "1", "2");
+    assertComparisonThrowsWithMessage(
+        new IntObject(1), new IntObject(2), "$.testedField", "1", "2");
   }
 
   @Test
@@ -222,18 +231,20 @@ public class SimpleObjectIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_intsDefaultActualStrict() {
-    assertComparisonThrowsWithMessage(new IntObject(1), new IntObject(0), "testedField", "1", "0");
+    assertComparisonThrowsWithMessage(
+        new IntObject(1), new IntObject(0), "$.testedField", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_intsDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        new IntObject(1), new IntObject(0), "testedField", "1", "0", IGNORE_DEFAULTS);
+        new IntObject(1), new IntObject(0), "$.testedField", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_intsDefaultExpectedStrict() {
-    assertComparisonThrowsWithMessage(new IntObject(0), new IntObject(1), "testedField", "0", "1");
+    assertComparisonThrowsWithMessage(
+        new IntObject(0), new IntObject(1), "$.testedField", "0", "1");
   }
 
   @Test
@@ -251,7 +262,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_longsDifferent() {
     assertComparisonThrowsWithMessage(
-        new LongObject(1l), new LongObject(2l), "testedField", "1", "2");
+        new LongObject(1l), new LongObject(2l), "$.testedField", "1", "2");
   }
 
   @Test
@@ -262,19 +273,19 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_longsDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new LongObject(1l), new LongObject(0l), "testedField", "1", "0");
+        new LongObject(1l), new LongObject(0l), "$.testedField", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_longsDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        new LongObject(1l), new LongObject(0l), "testedField", "1", "0", IGNORE_DEFAULTS);
+        new LongObject(1l), new LongObject(0l), "$.testedField", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_longsDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new LongObject(0l), new LongObject(1l), "testedField", "0", "1");
+        new LongObject(0l), new LongObject(1l), "$.testedField", "0", "1");
   }
 
   @Test
@@ -292,7 +303,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_floatsDifferent() {
     assertComparisonThrowsWithMessage(
-        new FloatObject(1f), new FloatObject(2f), "testedField", "1.0", "2.0");
+        new FloatObject(1f), new FloatObject(2f), "$.testedField", "1.0", "2.0");
   }
 
   @Test
@@ -303,19 +314,19 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_floatsDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new FloatObject(1f), new FloatObject(0f), "testedField", "1.0", "0.0");
+        new FloatObject(1f), new FloatObject(0f), "$.testedField", "1.0", "0.0");
   }
 
   @Test
   public void assertReflectionEquals_floatsDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        new FloatObject(1f), new FloatObject(0f), "testedField", "1.0", "0.0", IGNORE_DEFAULTS);
+        new FloatObject(1f), new FloatObject(0f), "$.testedField", "1.0", "0.0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_floatsDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new FloatObject(0f), new FloatObject(1f), "testedField", "0.0", "1.0");
+        new FloatObject(0f), new FloatObject(1f), "$.testedField", "0.0", "1.0");
   }
 
   @Test
@@ -333,7 +344,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_doublesDifferent() {
     assertComparisonThrowsWithMessage(
-        new DoubleObject(1d), new DoubleObject(2d), "testedField", "1.0", "2.0");
+        new DoubleObject(1d), new DoubleObject(2d), "$.testedField", "1.0", "2.0");
   }
 
   @Test
@@ -344,19 +355,19 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_doublesDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new DoubleObject(1d), new DoubleObject(0d), "testedField", "1.0", "0.0");
+        new DoubleObject(1d), new DoubleObject(0d), "$.testedField", "1.0", "0.0");
   }
 
   @Test
   public void assertReflectionEquals_doublesDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        new DoubleObject(1d), new DoubleObject(0d), "testedField", "1.0", "0.0", IGNORE_DEFAULTS);
+        new DoubleObject(1d), new DoubleObject(0d), "$.testedField", "1.0", "0.0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_doublesDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new DoubleObject(0d), new DoubleObject(1d), "testedField", "0.0", "1.0");
+        new DoubleObject(0d), new DoubleObject(1d), "$.testedField", "0.0", "1.0");
   }
 
   @Test
@@ -374,7 +385,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_objectsDifferent() {
     assertComparisonThrowsWithMessage(
-        new SimpleObject(1), new SimpleObject(2), "testedField", "1", "2");
+        new SimpleObject(1), new SimpleObject(2), "$.testedField", "1", "2");
   }
 
   @Test
@@ -385,19 +396,19 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_objectsDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new SimpleObject(1), new SimpleObject(0), "testedField", "1", "0");
+        new SimpleObject(1), new SimpleObject(0), "$.testedField", "1", "0");
   }
 
   @Test
   public void assertReflectionEquals_objectsDefaultActualLenient() {
     assertComparisonThrowsWithMessage(
-        new SimpleObject(1), new SimpleObject(0), "testedField", "1", "0", IGNORE_DEFAULTS);
+        new SimpleObject(1), new SimpleObject(0), "$.testedField", "1", "0", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_objectsDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new SimpleObject(0), new SimpleObject(1), "testedField", "0", "1");
+        new SimpleObject(0), new SimpleObject(1), "$.testedField", "0", "1");
   }
 
   @Test
@@ -415,7 +426,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_stringsDifferent() {
     assertComparisonThrowsWithMessage(
-        new StringObject("x"), new StringObject("y"), "testedField", "\"x\"", "\"y\"");
+        new StringObject("x"), new StringObject("y"), "$.testedField", "\"x\"", "\"y\"");
   }
 
   @Test
@@ -426,7 +437,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_stringsDefaultActualStrict() {
     assertComparisonThrowsWithMessage(
-        new StringObject("x"), new StringObject(null), "testedField", "\"x\"", "null");
+        new StringObject("x"), new StringObject(null), "$.testedField", "\"x\"", "null");
   }
 
   @Test
@@ -434,7 +445,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new StringObject("x"),
         new StringObject(null),
-        "testedField",
+        "$.testedField",
         "\"x\"",
         "null",
         IGNORE_DEFAULTS);
@@ -443,7 +454,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
   @Test
   public void assertReflectionEquals_stringsDefaultExpectedStrict() {
     assertComparisonThrowsWithMessage(
-        new StringObject(null), new StringObject("x"), "testedField", "null", "\"x\"");
+        new StringObject(null), new StringObject("x"), "$.testedField", "null", "\"x\"");
   }
 
   @Test
@@ -459,7 +470,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new DateObject(new Date(1)),
         new DateObject(new Date(2)),
-        "testedField",
+        "$.testedField",
         new Date(1).toString(),
         new Date(2).toString());
   }
@@ -475,7 +486,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new DateObject(new Date(1)),
         new DateObject(null),
-        "testedField",
+        "$.testedField",
         new Date(1).toString(),
         "null",
         LENIENT_DATES);
@@ -487,7 +498,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new DateObject(new Date(1)),
         new DateObject(null),
-        "testedField",
+        "$.testedField",
         new Date(1).toString(),
         "null",
         LENIENT_DATES,
@@ -500,7 +511,7 @@ public class SimpleObjectIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new DateObject(null),
         new DateObject(new Date(1)),
-        "testedField",
+        "$.testedField",
         "null",
         new Date(1).toString(),
         LENIENT_DATES);

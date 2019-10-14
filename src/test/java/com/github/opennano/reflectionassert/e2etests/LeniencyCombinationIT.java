@@ -71,7 +71,7 @@ public class LeniencyCombinationIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new StringObject("x"),
         new StringObject("y"),
-        "testedField",
+        "$.testedField",
         "\"x\"",
         "\"y\"",
         toArray(modes));
@@ -83,7 +83,7 @@ public class LeniencyCombinationIT extends BaseIntegrationTest {
     assertComparisonThrowsWithMessage(
         new StringObject("x"),
         new StringObject(null),
-        "testedField",
+        "$.testedField",
         "\"x\"",
         "null",
         toArray(modes));

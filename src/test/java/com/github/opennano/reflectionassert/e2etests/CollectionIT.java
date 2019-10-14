@@ -25,7 +25,7 @@ public class CollectionIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_listValuesDifferent() {
-    assertComparisonThrowsWithMessage(Arrays.asList(1), Arrays.asList(2), "[0]", "1", "2");
+    assertComparisonThrowsWithMessage(Arrays.asList(1), Arrays.asList(2), "$[0]", "1", "2");
   }
 
   @Test
@@ -35,7 +35,7 @@ public class CollectionIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_arrayValuesDifferent() {
-    assertComparisonThrowsWithMessage(new int[] {1}, new int[] {2}, "[0]", "1", "2");
+    assertComparisonThrowsWithMessage(new int[] {1}, new int[] {2}, "$[0]", "1", "2");
   }
 
   @Test
@@ -45,7 +45,7 @@ public class CollectionIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_arraysAndListsInterchangeableDifferent() {
-    assertComparisonThrowsWithMessage(new int[] {1}, Arrays.asList(2), "[0]", "1", "2");
+    assertComparisonThrowsWithMessage(new int[] {1}, Arrays.asList(2), "$[0]", "1", "2");
   }
 
   @Test
@@ -55,46 +55,46 @@ public class CollectionIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_multiValuelistValuesDifferentStrict() {
-    assertComparisonThrowsWithMessage(Arrays.asList(1, 2), Arrays.asList(1, 3), "[1]", "2", "3");
+    assertComparisonThrowsWithMessage(Arrays.asList(1, 2), Arrays.asList(1, 3), "$[1]", "2", "3");
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistValuesDifferentLenientDefaultsIrrelevant() {
     assertComparisonThrowsWithMessage(
-        Arrays.asList(1, 2), Arrays.asList(1, 3), "[1]", "2", "3", IGNORE_DEFAULTS);
+        Arrays.asList(1, 2), Arrays.asList(1, 3), "$[1]", "2", "3", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistValuesDifferentLenientOrder() {
     assertComparisonThrowsWithMessage(
-        Arrays.asList(1, 2), Arrays.asList(1, 3), "[1]", "2", "3", IGNORE_DEFAULTS);
+        Arrays.asList(1, 2), Arrays.asList(1, 3), "$[1]", "2", "3", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistValuesReorderedStrict() {
-    assertComparisonThrowsWithMessage(Arrays.asList(1, 2), Arrays.asList(2, 1), "[0]", "1", "2");
+    assertComparisonThrowsWithMessage(Arrays.asList(1, 2), Arrays.asList(2, 1), "$[0]", "1", "2");
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistExtraValueStrict() {
-    assertComparisonThrowsWithMessage(Arrays.asList(1, 2), Arrays.asList(1), "[1]", "2", null);
+    assertComparisonThrowsWithMessage(Arrays.asList(1, 2), Arrays.asList(1), "$[1]", "2", null);
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistExtraValueLenientOrder() {
     assertComparisonThrowsWithMessage(
-        Arrays.asList(1, 2), Arrays.asList(1), "[*]", "2", null, LENIENT_ORDER);
+        Arrays.asList(1, 2), Arrays.asList(1), "$[*]", "2", null, LENIENT_ORDER);
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistMissingValueStrict() {
-    assertComparisonThrowsWithMessage(Arrays.asList(1), Arrays.asList(1, 2), "[1]", null, "2");
+    assertComparisonThrowsWithMessage(Arrays.asList(1), Arrays.asList(1, 2), "$[1]", null, "2");
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistMissingValueLenientOrder() {
     assertComparisonThrowsWithMessage(
-        Arrays.asList(1), Arrays.asList(1, 2), "[*]", null, "2", LENIENT_ORDER);
+        Arrays.asList(1), Arrays.asList(1, 2), "$[*]", null, "2", LENIENT_ORDER);
   }
 
   @Test
@@ -109,7 +109,7 @@ public class CollectionIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_listsNullExpectedStrict() {
-    assertComparisonThrowsWithMessage(null, Arrays.asList(), "", "null", "[]");
+    assertComparisonThrowsWithMessage(null, Arrays.asList(), "$", "null", "[]");
   }
 
   @Test
@@ -119,24 +119,24 @@ public class CollectionIT extends BaseIntegrationTest {
 
   @Test
   public void assertReflectionEquals_listsNullActualStrict() {
-    assertComparisonThrowsWithMessage(Arrays.asList(), null, "", "[]", "null");
+    assertComparisonThrowsWithMessage(Arrays.asList(), null, "$", "[]", "null");
   }
 
   @Test
   public void assertReflectionEquals_listsNullActualLenient() {
-    assertComparisonThrowsWithMessage(Arrays.asList(), null, "", "[]", "null", IGNORE_DEFAULTS);
+    assertComparisonThrowsWithMessage(Arrays.asList(), null, "$", "[]", "null", IGNORE_DEFAULTS);
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistDuplicateInExpected() {
     assertComparisonThrowsWithMessage(
-        Arrays.asList(1, 2, 2), Arrays.asList(2, 1), "[*]", "2", null, LENIENT_ORDER);
+        Arrays.asList(1, 2, 2), Arrays.asList(2, 1), "$[*]", "2", null, LENIENT_ORDER);
   }
 
   @Test
   public void assertReflectionEquals_multiValuelistDuplicateInActual() {
     assertComparisonThrowsWithMessage(
-        Arrays.asList(1, 2), Arrays.asList(2, 2, 1), "[*]", null, "2", LENIENT_ORDER);
+        Arrays.asList(1, 2), Arrays.asList(2, 2, 1), "$[*]", null, "2", LENIENT_ORDER);
   }
 
   ////////// SET TESTS //////////

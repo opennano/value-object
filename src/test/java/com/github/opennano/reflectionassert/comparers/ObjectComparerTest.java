@@ -102,7 +102,7 @@ public class ObjectComparerTest {
     SimpleObject expected = new SimpleObject("x");
     SimpleObject actual = new SimpleObject("y");
 
-    when(mockComparerManager.getDiff("$testedField", "x", "y", true)).thenReturn(mockDiff1);
+    when(mockComparerManager.getDiff("$.testedField", "x", "y", true)).thenReturn(mockDiff1);
 
     Diff actualDiff = comparer.compare("$", expected, actual, mockComparerManager, true);
 

@@ -22,7 +22,6 @@ import com.github.opennano.reflectionassert.worker.ValueComparer;
 public class ObjectComparer extends ValueComparer {
 
   private static final String DOT = ".";
-  private static final String EMPTY = "";
 
   /**
    * @param expected the expected object
@@ -118,7 +117,7 @@ public class ObjectComparer extends ValueComparer {
       boolean fullDiff) {
 
     String fieldName = field.getName();
-    String path = String.join(parentPath.length() > 1 ? DOT : EMPTY, parentPath, fieldName);
+    String path = String.join(DOT, parentPath, fieldName);
     try {
       return comparer.getDiff(path, field.get(expected), field.get(actual), fullDiff);
     } catch (IllegalArgumentException | IllegalAccessException e) {
