@@ -4,7 +4,7 @@
 
   <groupId>com.github.opennano</groupId>
   <artifactId>reflection-assert</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.0.8</version>
 
   <name>Reflection Assertions</name>
   <description>performs deep comparisons of objects via field reflection</description>
@@ -32,7 +32,7 @@
 
   <scm>
     <connection>scm:git:https://github.com/opennano/reflection-assert.git</connection>
-    <tag></tag>
+    <tag>reflection-assert-0.0.8</tag>
     <url>https://github.com/opennano/reflection-assert</url>
   </scm>
   <issueManagement>
