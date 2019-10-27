@@ -40,7 +40,7 @@ public class LeniencyCombinationIT extends BaseIntegrationTest {
     for (LeniencyMode mode : LeniencyMode.values()) {
       List<List<LeniencyMode>> newCombinations = new ArrayList<>(combos.size());
       for (List<LeniencyMode> combination : combos) {
-        // at every position we need a either include the item or not
+        // at every position we need to either include the item or not
         // if we don't include it, we already have that combination
         // if
         List<LeniencyMode> includingNext = new ArrayList<>(combination.size() + 1);

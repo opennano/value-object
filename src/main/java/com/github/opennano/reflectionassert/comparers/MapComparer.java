@@ -17,8 +17,8 @@ import com.github.opennano.reflectionassert.worker.ComparerManager;
 import com.github.opennano.reflectionassert.worker.ValueComparer;
 
 /**
- * A comparer for maps. This will compare all values with corresponding keys, where the equality of
- * keys is the usual map sematics (i.e. equals and hashcode).
+ * a comparer that compares values with matching keys, where the equality of
+ * keys is the usual map semantics (i.e. equals and hashcode).
  */
 public class MapComparer extends ValueComparer {
 
@@ -72,7 +72,7 @@ public class MapComparer extends ValueComparer {
       }
     }
 
-    // any item that matched a expected entry has been removed--the rest are unexpected
+    // any item that matched an expected entry has been removed--the rest are unexpected
     actualMap.entrySet().forEach(entry -> addUnexpectedItemDiff(path, entry, diffs));
 
     return createDiff(path, diffs, fullDiff);
