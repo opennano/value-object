@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests;
+package scenariotests;
 
 import static com.github.opennano.reflectionassert.LeniencyMode.IGNORE_DEFAULTS;
 import static com.github.opennano.reflectionassert.ReflectionAssertions.assertReflectionEquals;
@@ -10,10 +10,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.reflectionassert.e2etests.samplepojos.BidirectionalOne;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.BidirectionalTwo;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.DeepObject;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionException;
+
+import scenariotests.samplepojos.BidirectionalOne;
+import scenariotests.samplepojos.BidirectionalTwo;
+import scenariotests.samplepojos.DeepObject;
 
 public class EdgeCaseIT extends BaseIntegrationTest {
 

@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests;
+package scenariotests;
 
 import static com.github.opennano.reflectionassert.ReflectionAssertions.assertReflectionEquals;
 
@@ -11,7 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.github.opennano.reflectionassert.LeniencyMode;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.StringObject;
+
+import scenariotests.samplepojos.StringObject;
 
 public class LeniencyCombinationIT extends BaseIntegrationTest {
 

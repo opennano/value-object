@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests;
+package scenariotests;
 
 import static com.github.opennano.reflectionassert.LeniencyMode.IGNORE_DEFAULTS;
 import static com.github.opennano.reflectionassert.LeniencyMode.LENIENT_ORDER;

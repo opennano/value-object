@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests;
+package scenariotests;
 
 import static com.github.opennano.reflectionassert.LeniencyMode.IGNORE_DEFAULTS;
 import static com.github.opennano.reflectionassert.LeniencyMode.LENIENT_DATES;
@@ -8,17 +8,17 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.reflectionassert.e2etests.samplepojos.BooleanObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.ByteObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.CharObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.DateObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.DoubleObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.FloatObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.IntObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.LongObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.ShortObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.SimpleObject;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.StringObject;
+import scenariotests.samplepojos.BooleanObject;
+import scenariotests.samplepojos.ByteObject;
+import scenariotests.samplepojos.CharObject;
+import scenariotests.samplepojos.DateObject;
+import scenariotests.samplepojos.DoubleObject;
+import scenariotests.samplepojos.FloatObject;
+import scenariotests.samplepojos.IntObject;
+import scenariotests.samplepojos.LongObject;
+import scenariotests.samplepojos.ShortObject;
+import scenariotests.samplepojos.SimpleObject;
+import scenariotests.samplepojos.StringObject;
 
 /** test simple objects with a single field of various types */
 public class SimpleObjectIT extends BaseIntegrationTest {

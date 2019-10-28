@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests.samplepojos;
+package scenariotests.samplepojos;
 
 public class SimpleObject {
 

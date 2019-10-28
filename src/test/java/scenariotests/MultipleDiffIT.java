@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests;
+package scenariotests;
 
 import static com.github.opennano.reflectionassert.LeniencyMode.IGNORE_DEFAULTS;
 import static com.github.opennano.reflectionassert.LeniencyMode.LENIENT_ORDER;
@@ -12,8 +12,9 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 import com.github.opennano.reflectionassert.LeniencyMode;
-import com.github.opennano.reflectionassert.e2etests.samplepojos.DeepObject;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionException;
+
+import scenariotests.samplepojos.DeepObject;
 
 /** ensure that comparisons yielding multiple diffs are reported correctly */
 public class MultipleDiffIT extends BaseIntegrationTest {

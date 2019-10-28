@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.e2etests.samplepojos;
+package scenariotests.samplepojos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
