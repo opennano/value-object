@@ -67,7 +67,7 @@ Do plan on spending a good amount of time testing your changes, as all code must
 
 
 ### Formatter
-Use the Google Code Formatter and Eclipse defaults for organizing imports. For json files, use the formatter as a guide (i.e. use a two-space indent).
+Use the [Google Code Formatter](https://github.com/google/google-java-format) and [Eclipse defaults](https://stackoverflow.com/questions/14716283/is-it-possible-for-intellij-to-organize-imports-the-same-way-as-in-eclipse) for organizing imports. For json and other files, use the formatter as a guide (i.e. use a two-space indent).
 
 ### Testing
 Start testing by writing scenario tests first. There are no coverage requirements at this level--these tests provide regression proofing for future changes, so just cover the use cases you are adding or changing, typically by thoroughly testing all happy paths but negative tests and edge cases only as needed.

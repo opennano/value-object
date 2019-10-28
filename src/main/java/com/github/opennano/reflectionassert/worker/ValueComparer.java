@@ -11,7 +11,7 @@ import com.github.opennano.reflectionassert.diffs.ParentDiff;
 import com.github.opennano.reflectionassert.diffs.PartialDiff;
 
 /**
- * Interface for a class that can compare two objects and produce a {@link Diff}.
+ * Instances of this class can compare two objects and produce a {@link Diff}.
  *
  * <p>One should always first call {@link #canCompare(Object, Object)} to ensure comparison is
  * supported by this delegate before calling {@link #compare(String, Object, Object,
@@ -50,8 +50,8 @@ public abstract class ValueComparer {
    *
    * @param path the path so far (from root down to the objects being compared)
    * @param childDiffs the differences detected in children of the current node
-   * @param fullDiff when false comparison should end at the first found difference, in which case a
-   *     {@link PartialDiff#PARTIAL_DIFF_TOKEN} should be returned.
+   * @param fullDiff when false and there are differences a {@link PartialDiff#PARTIAL_DIFF_TOKEN}
+   *     is returned instead of a parent diff.
    * @return a new subtype of Diff appropriate for the types of parameters provided
    */
   protected Diff createDiff(String path, List<Diff> childDiffs, boolean fullDiff) {
