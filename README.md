@@ -19,12 +19,14 @@ Because eventually you are going to maintain or author a test like this:
 ```
 @Test 
 public void myTest() {
-...
-assertEquals(expected.getFieldA(), actual.getFieldA());
-assertEquals(expected.getFieldB().getField1(), actual.getFieldB().getField1());
-assertEquals(expected.getFieldB().getField2(), actual.getFieldB().getField2());
-assertEquals(expected.getFieldC(), actual.getFieldC());
-// et cetera ad nauseum
+  ...
+  
+  assertEquals(expected.getFieldA(), actual.getFieldA());
+  assertEquals(expected.getFieldB().getField1(), actual.getFieldB().getField1());
+  assertEquals(expected.getFieldB().getField2(), actual.getFieldB().getField2());
+  assertEquals(expected.getFieldC(), actual.getFieldC());
+  
+  // et cetera ad nauseum
 }
 ```
 But it is a lot quicker to write and easier to maintain such a test as a single assertion:
@@ -32,8 +34,9 @@ But it is a lot quicker to write and easier to maintain such a test as a single 
 ```
 @Test 
 public void myTest() {
-...
-assertReflectionEquals(expected, actual);
+  ...
+  
+  assertReflectionEquals(expected, actual);
 }
 ```
 
@@ -45,14 +48,18 @@ To learn how to use this library see the [User Guide](https://github.com/opennan
 
 ### Maven
 
+To include this project on your Maven classpath, add this element to the dependencies element in your pom file:
+
 ```xml
 <dependency>
   <groupId>com.github.opennano</groupId>
   <artifactId>reflection-assert</artifactId>
-  <version>1.0.0</version>
+  <version>${reflection-assert.version}</version>
   <scope>test</scope>
 </dependency>
 ```
+
+Check [Maven Central](https://search.maven.org/search?q=a:reflection-assert) for the latest release version of this library.
 
 ## Contributing
 Before starting, make sure the feature or fix you are contributing is first accepted as a valid issue. If no such issue exists, first create one [here](https://github.com/opennano/reflection-assert/issues).
@@ -64,7 +71,6 @@ Do plan on spending a good amount of time testing your changes, as all code must
 * Commit your changes: `git commit -am 'add new feature'`
 * Push your changes to the remote repository: `git push origin issue-123`
 * Submit a [pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) to merge your fork's branch back to master
-
 
 ### Formatter
 Use the [Google Code Formatter](https://github.com/google/google-java-format) and [Eclipse defaults](https://stackoverflow.com/questions/14716283/is-it-possible-for-intellij-to-organize-imports-the-same-way-as-in-eclipse) for organizing imports. For json and other files, use the formatter as a guide (i.e. use a two-space indent).
@@ -78,15 +84,12 @@ Once you are satisfied with scenario coverage you should start writing unit test
 Once the build is passing locally, create a pull request to master. Code review concerns and comments must be addressed before the PR will be merged. Once merged, your code will be included in the next release.
 
 ## Authors
-
 * **[opennano](https://github.com/opennano)** - *Initial work*
 
 See also the list of [contributors](https://github.com/opennano/reflection-assert/contributors) who participated in this project.
 
 ## License
-
-This is free and unencumbered software released into the public domain - see the [LICENSE](LICENSE) file for details
+This is free and unencumbered software released into the public domain - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-
 * [Unitils](http://www.unitils.org), an excellent but more heavyweight alternative. This library borrows from their simple and intuitive API and solves for many of the same use cases.
