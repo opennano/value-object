@@ -4,7 +4,7 @@
 
   <groupId>com.github.opennano</groupId>
   <artifactId>reflection-assert</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
 
   <name>Reflection Assertions</name>
   <description>performs deep comparisons of objects via field reflection</description>
