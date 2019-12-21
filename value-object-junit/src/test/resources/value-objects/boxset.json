@@ -1,0 +1,207 @@
+{
+  "@id" : 1,
+  "id" : 1,
+  "name" : "mockName",
+  "albums" : [ {
+    "@id" : 2,
+    "id" : 2,
+    "name" : "mockName2",
+    "musicBrainzId" : "mockMusicBrainzId",
+    "amazonId" : "mockAmazonId",
+    "indexInBoxset" : 3,
+    "discs" : [ {
+      "@id" : 3,
+      "id" : 4,
+      "name" : "mockName3",
+      "tracks" : [ {
+        "@id" : 4,
+        "id" : 5,
+        "name" : "mockName4",
+        "performances" : [ {
+          "@id" : 5,
+          "id" : 6,
+          "tracks" : [ 4 ],
+          "composition" : {
+            "@id" : 6,
+            "id" : 7,
+            "name" : "mockName5",
+            "catalogItems" : [ {
+              "id" : 8,
+              "name" : "mockName6",
+              "separator" : "mockSeparator",
+              "number" : "mockNumber"
+            } ],
+            "commonNames" : [ "mockCommonNames" ],
+            "key" : "A_FLAT_MAJOR",
+            "instrumentation" : [ "mockInstrumentation" ],
+            "instrumentationShown" : true,
+            "type" : "mockType",
+            "typeShown" : true,
+            "parentHidden" : true,
+            "parentComposition" : 6,
+            "index" : 9,
+            "enumerationStyle" : "NUMBERS",
+            "childCompositions" : [ 6 ],
+            "fragment" : true,
+            "sectionType" : "TABLEAUX",
+            "operaNumber" : 10,
+            "actors" : [ "mockActors" ],
+            "compositionComposers" : [ {
+              "@id" : 7,
+              "id" : 11,
+              "composition" : 6,
+              "composer" : {
+                "@id" : 8,
+                "id" : 12,
+                "name" : "mockName7",
+                "sortableName" : "mockSortableName",
+                "nativeName" : "mockNativeName",
+                "sortableNativeName" : "mockSortableNativeName",
+                "arrangementComposers" : [ {
+                  "@id" : 9,
+                  "id" : 13,
+                  "composition" : 6,
+                  "composer" : 8,
+                  "attributionOrder" : 14
+                } ],
+                "compositionComposers" : [ 7 ]
+              },
+              "attributionOrder" : 15
+            } ],
+            "arrangementOf" : 6,
+            "arrangementComposers" : [ {
+              "@id" : 10,
+              "id" : 16,
+              "composition" : 6,
+              "composer" : {
+                "@id" : 11,
+                "id" : 17,
+                "name" : "mockName8",
+                "sortableName" : "mockSortableName2",
+                "nativeName" : "mockNativeName2",
+                "sortableNativeName" : "mockSortableNativeName2",
+                "arrangementComposers" : [ 10 ],
+                "compositionComposers" : [ {
+                  "@id" : 12,
+                  "id" : 18,
+                  "composition" : 6,
+                  "composer" : 11,
+                  "attributionOrder" : 19
+                } ]
+              },
+              "attributionOrder" : 20
+            } ],
+            "arrangedForInstruments" : [ "mockArrangedForInstruments" ],
+            "arrangementType" : "ARRANGEMENT"
+          },
+          "performingArtists" : [ {
+            "id" : 21,
+            "performance" : 5,
+            "artist" : {
+              "@id" : 13,
+              "id" : 22,
+              "name" : "mockName9",
+              "sortableName" : "mockSortableName3",
+              "nativeName" : "mockNativeName3",
+              "sortableNativeName" : "mockSortableNativeName3",
+              "arrangementComposers" : [ {
+                "@id" : 14,
+                "id" : 23,
+                "composition" : {
+                  "@id" : 15,
+                  "id" : 24,
+                  "name" : "mockName10",
+                  "catalogItems" : [ {
+                    "id" : 25,
+                    "name" : "mockName11",
+                    "separator" : "mockSeparator2",
+                    "number" : "mockNumber2"
+                  } ],
+                  "commonNames" : [ "mockCommonNames2" ],
+                  "key" : "A",
+                  "instrumentation" : [ "mockInstrumentation2" ],
+                  "instrumentationShown" : true,
+                  "type" : "mockType2",
+                  "typeShown" : true,
+                  "parentHidden" : true,
+                  "parentComposition" : 15,
+                  "index" : 26,
+                  "enumerationStyle" : "NUMBERS",
+                  "childCompositions" : [ 15 ],
+                  "fragment" : true,
+                  "sectionType" : "TABLEAUX",
+                  "operaNumber" : 27,
+                  "actors" : [ "mockActors2" ],
+                  "compositionComposers" : [ {
+                    "@id" : 16,
+                    "id" : 28,
+                    "composition" : 15,
+                    "composer" : 13,
+                    "attributionOrder" : 29
+                  } ],
+                  "arrangementOf" : 15,
+                  "arrangementComposers" : [ 14 ],
+                  "arrangedForInstruments" : [ "mockArrangedForInstruments2" ],
+                  "arrangementType" : "ORCHESTRATION"
+                },
+                "composer" : 13,
+                "attributionOrder" : 30
+              } ],
+              "compositionComposers" : [ {
+                "@id" : 17,
+                "id" : 31,
+                "composition" : {
+                  "@id" : 18,
+                  "id" : 32,
+                  "name" : "mockName12",
+                  "catalogItems" : [ {
+                    "id" : 33,
+                    "name" : "mockName13",
+                    "separator" : "mockSeparator3",
+                    "number" : "mockNumber3"
+                  } ],
+                  "commonNames" : [ "mockCommonNames3" ],
+                  "key" : "A_SHARP_MINOR",
+                  "instrumentation" : [ "mockInstrumentation3" ],
+                  "instrumentationShown" : true,
+                  "type" : "mockType3",
+                  "typeShown" : true,
+                  "parentHidden" : true,
+                  "parentComposition" : 18,
+                  "index" : 34,
+                  "enumerationStyle" : "NUMBERS",
+                  "childCompositions" : [ 18 ],
+                  "fragment" : true,
+                  "sectionType" : "TABLEAUX",
+                  "operaNumber" : 35,
+                  "actors" : [ "mockActors3" ],
+                  "compositionComposers" : [ 17 ],
+                  "arrangementOf" : 18,
+                  "arrangementComposers" : [ {
+                    "@id" : 19,
+                    "id" : 36,
+                    "composition" : 18,
+                    "composer" : 13,
+                    "attributionOrder" : 37
+                  } ],
+                  "arrangedForInstruments" : [ "mockArrangedForInstruments3" ],
+                  "arrangementType" : "TRANSCRIPTION"
+                },
+                "composer" : 13,
+                "attributionOrder" : 38
+              } ]
+            },
+            "order" : 39,
+            "roles" : [ "mockRoles" ],
+            "featured" : true
+          } ]
+        } ],
+        "disc" : 3,
+        "indexInDisc" : 40
+      } ],
+      "album" : 2,
+      "indexInAlbum" : 41
+    } ],
+    "boxset" : 1
+  } ]
+}
