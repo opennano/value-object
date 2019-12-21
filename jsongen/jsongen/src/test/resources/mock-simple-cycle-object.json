@@ -1,8 +1,0 @@
-{
-  "@type" : "scenariotests.pojos.BidirectionalOne",
-  "@id" : 1,
-  "two" : {
-    "@type" : "scenariotests.pojos.BidirectionalTwo",
-    "one" : 1
-  }
-}
