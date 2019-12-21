@@ -1,0 +1,15 @@
+{
+  "@type" : "scenariotests.pojos.DeepObject",
+  "level1Field" : {
+    "@type" : "scenariotests.pojos.DeepObject$Level1",
+    "level2Fields" : [ {
+      "@type" : "scenariotests.pojos.DeepObject$Level2",
+      "level3Field" : {
+        "mockLevel3FieldKey" : {
+          "@type" : "scenariotests.pojos.DeepObject$Level3",
+          "level4Field" : "mockLevel4Field"
+        }
+      }
+    } ]
+  }
+}
