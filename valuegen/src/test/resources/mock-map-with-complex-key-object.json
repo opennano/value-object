@@ -1,8 +1,0 @@
-{
-  "@type" : "scenariotests.pojos.MapWithComplexKeyObject",
-  "testedField" : [ [ {
-    "@type" : "scenariotests.pojos.MapWithComplexKeyObject$MapKey",
-    "keyStringField" : "mockKeyStringField",
-    "keyIntField" : 1
-  }, 2 ] ]
-}
