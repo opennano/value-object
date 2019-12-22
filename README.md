@@ -1,6 +1,6 @@
 # Value Object
 
-The value object project is a suite of tools designed to facilitate testing with value objects.
+The value object project is a suite of tools designed to facilitate testing with value objects in Java.
 
 ## Contributing
 Before starting, make sure the feature or fix you are contributing is first accepted as a valid issue. If no such issue exists, first create one [here](https://github.com/opennano/reflection-assert/issues).
