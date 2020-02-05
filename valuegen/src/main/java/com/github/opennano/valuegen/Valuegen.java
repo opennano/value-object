@@ -20,7 +20,7 @@ import com.github.opennano.valuegen.utils.ReflectionUtil;
  * <p><code>Valuegen.createValueObject(MyBean.class)</code>
  *
  * <p>An object is instantiated and populated with mock data as much as possible. Every effort is
- * made to create some kind of value, but in the event a value can't be produced a value will not be
+ * made to create some kind of value, but in the event a value can't be produced no value will be
  * set, in which case the field is left to its default value. The following is a non-exhaustive list
  * of interesting types and the strategies that are (or could be) applied to instantiating them. In
  * theory all behavior can be customized using a custom {@link ValueGeneratorDelegate}. See {@link
@@ -29,8 +29,7 @@ import com.github.opennano.valuegen.utils.ReflectionUtil;
  * <ul>
  *   <li>Abstract classes and interfaces are resolved to subtypes where possible. When the default
  *       {@link SubtypeStrategy#UNIQUE_SUBTYPE} is used, a subtype is used as the value object type
- *       if one can be found, and if no other instantiable types are found, otherwise a dynamic
- *       proxy class is created.
+ *       if exactly one exists on the classpath, otherwise a dynamic proxy class is created.
  *   <li>Object cycles are handled by reusing the value generated on the previous encounter when the
  *       default {@link CycleStrategy#REUSE_ANCESTOR_VALUE} is used.
  *   <li>Transient, static, or synthetic fields are ignored.
@@ -48,8 +47,8 @@ import com.github.opennano.valuegen.utils.ReflectionUtil;
 public class Valuegen {
 
   /**
-   * Use this type-safe convenience method to create a value object of the provided type using all
-   * default configurations.
+   * Use this type-safe convenience method to create a value object of the provided type using the
+   * default configuration.
    *
    * @param <T> the type of object to create
    * @param valueObjectClass the generated object will be an instance of this class

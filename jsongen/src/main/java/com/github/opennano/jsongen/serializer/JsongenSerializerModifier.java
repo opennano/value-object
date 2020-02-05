@@ -52,7 +52,7 @@ public class JsongenSerializerModifier extends BeanSerializerModifier {
   /**
    * Proxies are basically instances of an object where we couldn't find a good value object to
    * generate. To be as helpful as possible, we can serialize these as simple empty objects, and let
-   * the user touch up the resulting JSON.
+   * the user touch up the resulting JSON manually.
    */
   @Override
   public JsonSerializer<?> modifySerializer(

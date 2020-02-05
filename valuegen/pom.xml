@@ -15,8 +15,11 @@
 	<name>Value Object Generator</name>
 	<description>generates value objects via field reflection</description>
 
-	<dependencies>
+	<properties>
+		<bean-matchers.version>0.10</bean-matchers.version>
+	</properties>
 
+	<dependencies>
 		<!-- object instantiation -->
 		<dependency>
 			<groupId>org.objenesis</groupId>
@@ -40,6 +43,11 @@
 			<artifactId>reflection-assert-hamcrest</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.bean-matchers</groupId>
+			<artifactId>bean-matchers</artifactId>
+			<version>${bean-matchers.version}</version>
 		</dependency>
 	</dependencies>
 </project>

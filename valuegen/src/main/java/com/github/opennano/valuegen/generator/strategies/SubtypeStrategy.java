@@ -7,7 +7,7 @@ import com.github.opennano.valuegen.generator.TypeInfo;
 public interface SubtypeStrategy {
 
   /**
-   * This strategy is a no-op: no attempt is made to suitable instantiable type, saving a
+   * This strategy is a no-op: no attempt is made to find a suitable instantiable type, saving a
    * potentially expensive full classpath scan.
    */
   static SubtypeStrategy SKIP_TYPES = TypeInfo::getResolvedClass;

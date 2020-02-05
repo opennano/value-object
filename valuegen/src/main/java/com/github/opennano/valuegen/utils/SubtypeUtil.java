@@ -18,7 +18,7 @@ public class SubtypeUtil {
    * and the method will return back the superclass for convenience.
    *
    * <p>Scanning the classpath is an expensive and slow operation, depending on number of classes
-   * present. If this is not desired behavior consider use the {@link SubtypeStrategy#SKIP_TYPES}
+   * present. If this is not desired behavior consider using the {@link SubtypeStrategy#SKIP_TYPES}
    * strategy or providing your own strategy for resolving subtypes.
    *
    * @param superclass the class object for which an instantiable subtype is requested
@@ -56,7 +56,7 @@ public class SubtypeUtil {
 
     // find all subtypes of the primary type
     // filter out abstract classes and interfaces
-    // also remove any that don't implement any additional interfaces
+    // also remove any that don't implement all additional interfaces
     // if we get more than one, then we can't resolve to a single type
     // in which case we just pass back the input for convenience
     List<Class<?>> candidates =
@@ -71,14 +71,6 @@ public class SubtypeUtil {
     return candidates.size() == 1 ? candidates.get(0) : superclass;
   }
 
-  public static List<Class<?>> getAllConcreteSubtypesOf(Class<?> type) {
-    return new Reflections()
-        .getSubTypesOf(type)
-        .stream()
-        .filter(SubtypeUtil::isConcreteType)
-        .collect(Collectors.toList());
-  }
-
   private static boolean isConcreteType(Class<?> type) {
     return !type.isInterface() && !Modifier.isAbstract(type.getModifiers());
   }
@@ -87,5 +79,9 @@ public class SubtypeUtil {
     return superinterfaces
         .stream()
         .allMatch(superinterface -> superinterface.isAssignableFrom(type));
+  }
+  
+  private SubtypeUtil() {
+	  //no-op: singleton
   }
 }

@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
+import com.github.opennano.valuegen.ValueGenerationException;
 import com.github.opennano.valuegen.generator.TypeInfo;
 import com.github.opennano.valuegen.generator.ValueGeneratorDelegate;
 import com.github.opennano.valuegen.generator.ValueObjectGenerator;
@@ -19,14 +20,15 @@ public class NumberValueDelegate implements ValueGeneratorDelegate {
   public boolean handlesClass(Class<?> type) {
 
     return isInstanceOfAny(
-        type,
-        Number.class,
-        int.class,
-        float.class,
-        long.class,
-        double.class,
-        short.class,
-        byte.class);
+            type,
+            Number.class,
+            int.class,
+            float.class,
+            long.class,
+            double.class,
+            short.class,
+            byte.class)
+        && !type.getSimpleName().startsWith("Atomic");
   }
 
   @Override
@@ -69,7 +71,8 @@ public class NumberValueDelegate implements ValueGeneratorDelegate {
       Constructor<?> stringCtor = boxedType.getConstructor(String.class);
       return (Number) stringCtor.newInstance(byteAsString);
     } catch (SecurityException | ReflectiveOperationException | IllegalArgumentException e) {
-      throw new IllegalArgumentException("error using string constructor to create Number", e);
+      throw new ValueGenerationException(
+          "couldn't figure out what constructor to use for Number subtype " + numberClass, e);
     }
   }
 }

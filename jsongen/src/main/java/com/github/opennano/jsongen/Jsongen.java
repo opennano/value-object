@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
 import com.fasterxml.jackson.databind.ser.SerializerFactory;
 import com.github.opennano.jsongen.serializer.JsongenSerializerModifier;
 import com.github.opennano.valuegen.GeneratorConfig;
+import com.github.opennano.valuegen.ValueGenerationException;
 import com.github.opennano.valuegen.Valuegen;
 import com.github.opennano.valuegen.generator.strategies.MapKeyStrategy;
 
@@ -50,7 +51,7 @@ import com.github.opennano.valuegen.generator.strategies.MapKeyStrategy;
  * <p>Object cycles are handled by setting subsequent encounters to null, thereby not serializing
  * them at all (null values are ignored by this library).
  *
- * <p>Proxy classes are handled by interpreting the proxy as a plain Object.
+ * <p>Proxy classes are treated like a plain Java {@link Object}, i.e. serialized to '{}'.
  *
  * <p>If an error occurs serializing a field a message will be logged and the field will be left
  * alone (typically defaulting to null and therefore not serialized).
@@ -133,40 +134,41 @@ public class Jsongen {
     mapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT));
     mapper.setTimeZone(UTC);
     mapper.setLocale(Locale.US); // for consistency, should it even matter
-
-    mapper.setMixInResolver(
-        new MixInResolver() {
-
-          @Override
-          public Class<?> findMixInClassFor(Class<?> type) {
-            if (Object.class.equals(type)
-                || isProxy(type)
-                || type.isArray()
-                || isImplicitlyTyped(type)) {
-              return cycleInfo.isCyclicType(type) ? IdentifiableMixin.class : NoTypePropertyMixin.class;
-            }
-            return cycleInfo.isCyclicType(type) ? IdentifiableWithTypeMixin.class : TypePropertyMixin.class;
-          }
-
-          private boolean isImplicitlyTyped(Class<?> type) {
-            return IMPLICIT_TYPES.stream().anyMatch(imp -> imp.isAssignableFrom(type));
-          }
-
-          @Override
-          public MixInResolver copy() {
-            return this;
-          }
-        });
+    mapper.setMixInResolver(new IdAndTypeMixInResolver());
 
     try {
       return mapper.writeValueAsString(valueObject);
     } catch (JsonProcessingException e) {
-      throw new IllegalStateException("failed to create json from value object: " + valueObject, e);
+      throw new ValueGenerationException(
+          "failed to create json from value object: " + valueObject, e);
     }
   }
 
   private Jsongen() {
     // no-op: uninstantiable
+  }
+
+  public static final class IdAndTypeMixInResolver implements MixInResolver {
+    @Override
+    public Class<?> findMixInClassFor(Class<?> type) {
+      if (Object.class.equals(type) || isProxy(type) || type.isArray() || isImplicitlyTyped(type)) {
+        // doesn't appear to be any way to have a cycle with these types
+        // the "just identifiable" mixin was thus removed
+        return NoTypePropertyMixin.class;
+      }
+      return cycleInfo.isCyclicType(type)
+          ? IdentifiableWithTypeMixin.class
+          : TypePropertyMixin.class;
+    }
+
+    private boolean isImplicitlyTyped(Class<?> type) {
+      return IMPLICIT_TYPES.stream().anyMatch(imp -> imp.isAssignableFrom(type));
+    }
+
+    @Override
+    public MixInResolver copy() {
+      return this;
+    }
   }
 
   @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
@@ -175,9 +177,6 @@ public class Jsongen {
   @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
   private abstract static class TypePropertyMixin {}
 
-  @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-  private abstract static class IdentifiableMixin {}
-  
   @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
   @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
   private abstract static class IdentifiableWithTypeMixin {}

@@ -15,7 +15,6 @@ public class DateValueDelegate implements ValueGeneratorDelegate {
 
   private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
-  private int secondValueOffset = 1;
   private Calendar calendar = Calendar.getInstance(UTC);
 
   public DateValueDelegate() {
@@ -36,7 +35,7 @@ public class DateValueDelegate implements ValueGeneratorDelegate {
       Class<?> owningClass,
       ValueObjectGenerator valueGenerator) {
 
-    calendar.add(Calendar.SECOND, secondValueOffset++);
+    calendar.add(Calendar.SECOND, 1);
 
     if (Date.class.equals(typeInfo.getResolvedClass())) {
       return calendar.getTime();

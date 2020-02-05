@@ -56,7 +56,7 @@ public class ValueObjectGenerator {
   }
 
   public ValueObjectGenerator(
-      GeneratorConfig config, ValueGeneratorDelegate[] additionalValueGenerators) {
+      GeneratorConfig config, ValueGeneratorDelegate... additionalValueGenerators) {
 
     this(
         Stream.concat(

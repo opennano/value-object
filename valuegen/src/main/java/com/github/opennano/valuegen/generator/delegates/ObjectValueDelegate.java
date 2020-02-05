@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.github.opennano.valuegen.GeneratorConfig;
+import com.github.opennano.valuegen.ValueGenerationException;
 import com.github.opennano.valuegen.generator.TypeInfo;
 import com.github.opennano.valuegen.generator.ValueGeneratorDelegate;
 import com.github.opennano.valuegen.generator.ValueObjectGenerator;
@@ -58,7 +59,6 @@ public class ObjectValueDelegate implements ValueGeneratorDelegate {
       }
     }
 
-    // handle Objects now or else they'll fail the core Java filter below
     if (valueClass == Object.class) {
       return new Object();
     }
@@ -77,13 +77,6 @@ public class ObjectValueDelegate implements ValueGeneratorDelegate {
         || Modifier.isAbstract(valueClass.getModifiers())) {
       return proxiedClass(typeInfo);
     }
-
-    // if we got a core Java type bail
-    // do we want to maybe try to handle generating core Java types?
-    // not terribly useful and probably very messy...
-    //    if (isCoreJava(valueClass)) {
-    //      return null;
-    //    }
 
     // are we already in the process of creating a value object of the same type?
     // if so then we've found a cycle--figure out how to handle it
@@ -104,7 +97,6 @@ public class ObjectValueDelegate implements ValueGeneratorDelegate {
   }
 
   private Object proxiedClass(TypeInfo info) {
-    // FIXME info.getPrimaryType
     Class<?> superclass = info.getResolvedClass();
     Class<?>[] interfaces = info.getAdditionalInterfaces();
 
@@ -124,7 +116,7 @@ public class ObjectValueDelegate implements ValueGeneratorDelegate {
         (MethodInterceptor)
             (obj, method, args, proxy) -> {
               if (method.getDeclaringClass() != Object.class) {
-                throw new IllegalAccessException("method calls not supported on this proxy!");
+                throw new ValueGenerationException("method calls not supported on this proxy!");
               } else {
                 return proxy.invokeSuper(obj, args);
               }
@@ -148,10 +140,10 @@ public class ObjectValueDelegate implements ValueGeneratorDelegate {
     do {
       typeHeirarchy.add(ancestorClass);
       ancestorClass = ancestorClass.getSuperclass();
-    } while (ancestorClass != null && ancestorClass != Object.class);
+    } while (ancestorClass != Object.class);
 
     // sort by correct heirarchical order (ancestors first)
-    // this seems to produce the most intuitive results
+    // when visiting fields this produces the most intuitive results
     Collections.reverse(typeHeirarchy);
     return typeHeirarchy;
   }

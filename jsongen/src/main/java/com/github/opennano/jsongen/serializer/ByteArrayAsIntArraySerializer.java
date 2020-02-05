@@ -16,7 +16,7 @@ public class ByteArrayAsIntArraySerializer extends StdSerializer<byte[]> {
 
   @Override
   public boolean isEmpty(SerializerProvider prov, byte[] value) {
-    return value.length == 0;
+    return value == null || value.length == 0;
   }
 
   @Override
@@ -29,7 +29,7 @@ public class ByteArrayAsIntArraySerializer extends StdSerializer<byte[]> {
     gen.writeEndArray();
   }
 
-  public void serializeContents(byte[] value, JsonGenerator gen, SerializerProvider provider)
+  private void serializeContents(byte[] value, JsonGenerator gen, SerializerProvider provider)
       throws IOException {
 
     for (int i = 0, len = value.length; i < len; ++i) {

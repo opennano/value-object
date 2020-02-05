@@ -1,8 +1,8 @@
 package scenariotests;
 
 import static com.github.opennano.reflectionassert.hamcrest.ReflectionEqualsMatcher.reflectionEquals;
-import static com.github.opennano.valuegen.ProxyMatcher.isProxy;
 import static com.github.opennano.valuegen.Valuegen.createValueObject;
+import static com.github.opennano.valuegen.testutils.ProxyMatcher.isProxy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
