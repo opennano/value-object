@@ -91,5 +91,5 @@ public class UrlValueDelegateTest {
     } finally {
       System.setSecurityManager(defaultSecurity);
     }
-  };
+  }
 }

@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.annotations;
+package com.github.opennano.valueobject.junit;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
@@ -22,7 +22,7 @@ public @interface ValueObject {
    * the implementation and generate a value object as expected. However, if at some point in the
    * future a second implementation is added, the value generator won't know which to use and
    * instead will return a proxy. If the value object is then used as an expected value it will
-   * likely fail during comparison, and that failure would likely be difficult to track down.
+   * likely fail during comparison, and that failure could be difficult to track down.
    */
   boolean generate() default false;
 }
