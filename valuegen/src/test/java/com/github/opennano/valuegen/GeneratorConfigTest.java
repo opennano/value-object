@@ -5,10 +5,10 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.jupiter.api.Test;
 
+import com.github.opennano.testutils.JavaBeanTestUtil;
 import com.github.opennano.valuegen.generator.strategies.CycleStrategy;
 import com.github.opennano.valuegen.generator.strategies.MapKeyStrategy;
 import com.github.opennano.valuegen.generator.strategies.SubtypeStrategy;
-import com.github.opennano.valuegen.testutils.JavaBeanTestUtil;
 
 public class GeneratorConfigTest {
 

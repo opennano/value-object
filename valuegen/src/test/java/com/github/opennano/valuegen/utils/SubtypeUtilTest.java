@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.github.opennano.testutils.SingletonTestUtil;
 import com.github.opennano.valuegen.ValueGenerationException;
-import com.github.opennano.valuegen.testutils.SingletonTestUtil;
 
 @SuppressWarnings("unused") // used by a classpath scanning library
 @ExtendWith(MockitoExtension.class)

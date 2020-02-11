@@ -1,4 +1,4 @@
-package com.github.opennano.reflectionassert.testutils;
+package com.github.opennano.testutils;
 
 public class EnumTestUtil {
 

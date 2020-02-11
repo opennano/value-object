@@ -2,7 +2,7 @@ package com.github.opennano.valuegen;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.valuegen.testutils.ExceptionTestUtil;
+import com.github.opennano.testutils.ExceptionTestUtil;
 
 public class ValueGenerationExceptionTest {
 

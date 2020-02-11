@@ -1,53 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.github.opennano</groupId>
-		<artifactId>value-object</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
-	</parent>
+  <parent>
+    <groupId>com.github.opennano</groupId>
+    <artifactId>value-object</artifactId>
+    <version>1.0.3-SNAPSHOT</version>
+  </parent>
 
-	<artifactId>valuegen</artifactId>
+  <artifactId>valuegen</artifactId>
 
-	<name>Value Object Generator</name>
-	<description>generates value objects via field reflection</description>
+  <name>Value Object Generator</name>
+  <description>generates value objects via field reflection</description>
 
-	<properties>
-		<bean-matchers.version>0.10</bean-matchers.version>
-	</properties>
+  <dependencies>
+    <!-- object instantiation -->
+    <dependency>
+      <groupId>org.objenesis</groupId>
+      <artifactId>objenesis</artifactId>
+      <version>${objenesis.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>${reflections.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>${cglib.version}</version>
+    </dependency>
 
-	<dependencies>
-		<!-- object instantiation -->
-		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-			<version>${objenesis.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>${reflections.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>${cglib.version}</version>
-		</dependency>
-
-		<!-- test dependencies -->
-		<dependency>
-			<groupId>com.github.opennano</groupId>
-			<artifactId>reflection-assert-hamcrest</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.bean-matchers</groupId>
-			<artifactId>bean-matchers</artifactId>
-			<version>${bean-matchers.version}</version>
-		</dependency>
-	</dependencies>
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>com.github.opennano</groupId>
+      <artifactId>reflection-assert-hamcrest</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.opennano</groupId>
+      <artifactId>test-utils</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

@@ -2,8 +2,7 @@ package com.github.opennano.reflectionassert.exceptions;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionException;
-import com.github.opennano.reflectionassert.testutils.ExceptionTestUtil;
+import com.github.opennano.testutils.ExceptionTestUtil;
 
 public class ReflectionAssertionExceptionTest {
 

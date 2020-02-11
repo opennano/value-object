@@ -10,12 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.opennano.reflectionassert.diffs.Diff;
 import com.github.opennano.reflectionassert.diffs.Diff.DiffType;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionInternalException;
 import com.github.opennano.reflectionassert.report.DiffView;
 import com.github.opennano.reflectionassert.report.DiffVisitor;
-import com.github.opennano.reflectionassert.testutils.EnumTestUtil;
+import com.github.opennano.testutils.EnumTestUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class DiffTest {

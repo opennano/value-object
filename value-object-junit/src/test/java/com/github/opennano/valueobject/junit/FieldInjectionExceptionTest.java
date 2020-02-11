@@ -2,7 +2,7 @@ package com.github.opennano.valueobject.junit;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.valueobject.testutils.ExceptionTestUtil;
+import com.github.opennano.testutils.ExceptionTestUtil;
 
 public class FieldInjectionExceptionTest {
 

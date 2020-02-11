@@ -1,8 +1,4 @@
-package com.github.opennano.valueobject.testutils;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+package com.github.opennano.testutils;
 
 import java.lang.reflect.Constructor;
 import java.util.stream.Stream;
@@ -49,8 +45,8 @@ public class ExceptionTestUtil {
     // this scenario is a little different than the others
     // java fills in a default message when no message is specified
     if (exception != null) {
-      assertNotNull(exception.getMessage());
-      assertSame(cause, exception.getCause());
+      assert exception.getMessage() != null;
+      assert cause == exception.getCause();
     }
   }
 
@@ -89,8 +85,9 @@ public class ExceptionTestUtil {
       Throwable exception, String expectedMessage, Throwable expectedCause) {
 
     if (exception != null) {
-      assertEquals(expectedMessage, exception.getMessage());
-      assertSame(expectedCause, exception.getCause());
+      assert (expectedMessage == null && expectedCause == null)
+          || expectedMessage.equals(exception.getMessage());
+      assert expectedCause == exception.getCause();
     }
   }
 }

@@ -1,4 +1,4 @@
-package com.github.opennano.valuegen.testutils;
+package com.github.opennano.testutils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -10,10 +10,6 @@ import java.lang.reflect.Modifier;
  * <p>This works by invoking the private zero-arg constructor and simply ensuring it doesn't fail.
  */
 public class SingletonTestUtil {
-
-  private SingletonTestUtil() {
-    // no-op: singleton
-  }
 
   /**
    * Convenience method to verify that a class is not instantiable via a no-arg constructor.
@@ -38,5 +34,9 @@ public class SingletonTestUtil {
       String message = "zero-arg constructor threw an exception for type ";
       throw new IllegalStateException(message + type.getSimpleName(), e);
     }
+  }
+
+  private SingletonTestUtil() {
+    // no-op: singleton
   }
 }

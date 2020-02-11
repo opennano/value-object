@@ -2,7 +2,7 @@ package com.github.opennano.reflectionassert;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.reflectionassert.testutils.EnumTestUtil;
+import com.github.opennano.testutils.EnumTestUtil;
 
 public class LeniencyModeTest {
 

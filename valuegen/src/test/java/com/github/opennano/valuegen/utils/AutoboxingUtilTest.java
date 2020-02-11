@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.opennano.valuegen.testutils.SingletonTestUtil;
+import com.github.opennano.testutils.SingletonTestUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class AutoboxingUtilTest {

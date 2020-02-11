@@ -13,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.github.opennano.reflectionassert.diffs.Diff;
-import com.github.opennano.reflectionassert.diffs.ParentDiff;
 import com.github.opennano.reflectionassert.report.DiffVisitor;
 
 @ExtendWith(MockitoExtension.class)

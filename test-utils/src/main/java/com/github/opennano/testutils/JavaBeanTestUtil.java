@@ -1,4 +1,4 @@
-package com.github.opennano.valuegen.testutils;
+package com.github.opennano.testutils;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
@@ -8,10 +8,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.core.type.ClassMetadata;
-import org.springframework.core.type.classreading.AnnotationMetadataReadingVisitor;
-import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
+//import org.junit.jupiter.api.Test;
+//import org.springframework.core.type.ClassMetadata;
+//import org.springframework.core.type.classreading.AnnotationMetadataReadingVisitor;
+//import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
 
 public class JavaBeanTestUtil {
 
@@ -39,35 +39,35 @@ public class JavaBeanTestUtil {
 
   private static void assertValidJavaBean(Class<?> type) {
     assertThat(type, allOf(hasValidBeanConstructor(), hasValidGettersAndSetters()));
-    try {
-      assertToStringHandlesNulls(type.getDeclaredConstructor().newInstance());
-    } catch (Exception e) {
-      throw new IllegalArgumentException("java bean validation failed", e);
-    }
+//    try {
+//      assertToStringHandlesNulls(type.getDeclaredConstructor().newInstance());
+//    } catch (Exception e) {
+//      throw new IllegalArgumentException("java bean validation failed", e);
+//    }
   }
 
   /** tests that toString method handles null values properly */
-  public static void assertToStringHandlesNulls(Class<?> type) {
-    TestReflectionUtils.defaultObjectFill(type).toString(); // doesn't throw
-  }
+//  public static void assertToStringHandlesNulls(Class<?> type) {
+//    TestReflectionUtils.defaultObjectFill(type).toString(); // doesn't throw
+//  }
 
   /** tests that toString method handles null values properly */
-  public static void assertToStringHandlesNulls(Object target) {
-    TestReflectionUtils.defaultObjectFill(target).toString(); // doesn't throw
-  }
+//  public static void assertToStringHandlesNulls(Object target) {
+//    TestReflectionUtils.defaultObjectFill(target).toString(); // doesn't throw
+//  }
 
-  public static class InstantiableBeanFilter extends AbstractClassTestingTypeFilter {
-
-    @Override
-    protected boolean match(ClassMetadata metadata) {
-      return metadata.isConcrete()
-          && ((metadata instanceof AnnotationMetadataReadingVisitor)
-              && !((AnnotationMetadataReadingVisitor) metadata)
-                  .hasAnnotatedMethods(Test.class.getCanonicalName()))
-          && metadata.isIndependent()
-          && !metadata.getSuperClassName().equals(Enum.class.getName());
-    }
-  }
+//  public static class InstantiableBeanFilter extends AbstractClassTestingTypeFilter {
+//
+//    @Override
+//    protected boolean match(ClassMetadata metadata) {
+//      return metadata.isConcrete()
+//          && ((metadata instanceof AnnotationMetadataReadingVisitor)
+//              && !((AnnotationMetadataReadingVisitor) metadata)
+//                  .hasAnnotatedMethods(Test.class.getCanonicalName()))
+//          && metadata.isIndependent()
+//          && !metadata.getSuperClassName().equals(Enum.class.getName());
+//    }
+//  }
 
   private JavaBeanTestUtil() {
     // no-op: singleton
