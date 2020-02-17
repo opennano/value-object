@@ -15,6 +15,7 @@ import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AssignableTypeFilter;
+import org.springframework.util.ClassUtils;
 
 import com.github.opennano.valuegen.ValueGenerationException;
 import com.github.opennano.valuegen.generator.strategies.SubtypeStrategy;
@@ -39,18 +40,12 @@ public class SubtypeUtil {
         return false;
       }
 
-      return typeFilters
-          .stream()
-          .allMatch(
-              filter -> {
-                try {
-                  return filter.match(metadataReader, metadataReaderFactory);
-                } catch (IOException e) {
-                  // TODO Auto-generated catch block
-                  e.printStackTrace();
-                }
-                return false;
-              });
+      for (AssignableTypeFilter filter : typeFilters) {
+        if (!filter.match(metadataReader, metadataReaderFactory)) {
+          return false;
+        }
+      }
+      return true;
     }
   }
 
@@ -109,16 +104,7 @@ public class SubtypeUtil {
         provider
             .findCandidateComponents("")
             .stream()
-            .map(
-                defn -> {
-                  try {
-                    return Class.forName(defn.getBeanClassName());
-                  } catch (ClassNotFoundException e) {
-                    // no-op: just ignore this type then
-                  }
-                  return null;
-                })
-            .filter(Objects::nonNull)
+            .map(defn -> ClassUtils.resolveClassName(defn.getBeanClassName(), null))
             .limit(2)
             .collect(Collectors.toList());
 
