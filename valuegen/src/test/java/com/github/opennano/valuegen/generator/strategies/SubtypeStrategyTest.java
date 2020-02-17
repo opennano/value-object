@@ -31,5 +31,5 @@ public class SubtypeStrategyTest {
 
   private interface MyInterface {}
 
-  private class OnlySubType implements MyInterface {}
+  private static class OnlySubType implements MyInterface {}
 }

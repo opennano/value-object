@@ -23,6 +23,7 @@ public @interface ValueObject {
    * future a second implementation is added, the value generator won't know which to use and
    * instead will return a proxy. If the value object is then used as an expected value it will
    * likely fail during comparison, and that failure could be difficult to track down.
+   * @return true to generate an object, defaults to false to marshal one instead
    */
   boolean generate() default false;
 }

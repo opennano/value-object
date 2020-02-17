@@ -30,6 +30,7 @@ import com.github.opennano.jsongen.serializer.JsongenSerializerModifier;
 import com.github.opennano.valuegen.GeneratorConfig;
 import com.github.opennano.valuegen.ValueGenerationException;
 import com.github.opennano.valuegen.Valuegen;
+import com.github.opennano.valuegen.generator.ValueGeneratorDelegate;
 import com.github.opennano.valuegen.generator.strategies.MapKeyStrategy;
 
 /**
@@ -39,27 +40,25 @@ import com.github.opennano.valuegen.generator.strategies.MapKeyStrategy;
  * <p><code>Jsongen.printSample(MyBean.class)</code> You may also get the json as a string via
  * {@link #asJson(Class)}.
  *
- * <p>A sample object is created and populated as much as possible, then serialized using GSON. For
- * simple pojos this should produce a complete object as formatted json. For more complex objects
- * the tool might skip fields that it can't figure out how to serialize. For more info on how value
- * objects are created see {@link Valuegen}.
+ * <p>A sample object is created and recursively populated as much as possible, then serialized
+ * using GSON. For simple pojos this should produce a complete object as formatted json. For more
+ * complex objects the tool might skip fields that it can't figure out how to serialize. For more
+ * info on how value objects are created see {@link Valuegen}.
  *
- * <p>In the event the value object needs to be customized, you can create a value object first
- * using {@link Valuegen#createValueObject(Class)}, apply customizations programmatically, then
- * serialize using {@link Jsongen#toJson(Object)}.
+ * <p>In the event the value object is not generated to your liking, consider using a custom {@link
+ * GeneratorConfig} or contribute extra {@link ValueGeneratorDelegate} instances to {@link
+ * Valuegen#createValueObject(Type, GeneratorConfig, ValueGeneratorDelegate...)}. You may also take
+ * a more "brute force" approach by programmatically altering the returned value object. In any
+ * case, once the object is as desired in memory, serialize it using {@link Jsongen#toJson(Object)}.
  *
- * <p>Object cycles are handled by setting subsequent encounters to null, thereby not serializing
- * them at all (null values are ignored by this library).
+ * <p>Proxy classes, which are generated when {@link Valuegen} can't figure out a concrete subtype
+ * to use, are treated like a plain Java {@link Object} (i.e. serialized to '{}').
  *
- * <p>Proxy classes are treated like a plain Java {@link Object}, i.e. serialized to '{}'.
- *
- * <p>If an error occurs serializing a field a message will be logged and the field will be left
- * alone (typically defaulting to null and therefore not serialized).
+ * <p>If an error occurs serializing a field, the Java default value will apply (typically this
+ * means it will be null and therefore not serialized).
  *
  * <p>Dates are serialized in UTC time zone in the following ISO8601 compliant format: {@value
  * #DATE_FORMAT}.
- *
- * <p>Map keys must be strings; other key types will be marshaled to an empty JSON object.
  */
 public class Jsongen {
 
@@ -71,8 +70,9 @@ public class Jsongen {
   private static final BeanCycleInfo cycleInfo = new BeanCycleInfo();
 
   /**
-   * don't include type information for obvious types or types that Jackson can't decorate as a
-   * simple property
+   * Don't include type information for obvious types or types that Jackson can't decorate as a
+   * simple property. For example, 1 is obviously an int and preferred to [{"type" :
+   * "java.lang.int"}, 1] or any other such mess.
    */
   private static final Collection<Class<?>> IMPLICIT_TYPES =
       Collections.unmodifiableCollection(
@@ -91,6 +91,10 @@ public class Jsongen {
               Calendar.class));
 
   static {
+    // the default serialization strategy is not quite what we want
+    // for one, Jackson can handle complex map key types so allow those
+    // for two, when we detect a bean cycle we need to register it
+    // this is so that we can tell Jackson to use a special reference property
     generatorConfig = new GeneratorConfig();
     generatorConfig.setMapKeyStrategy(MapKeyStrategy.ANY_KEY_TYPE);
     generatorConfig.setCycleStrategy(
@@ -104,6 +108,8 @@ public class Jsongen {
    * Produce a value object serialized as json that is suitable for testing and prints the json to
    * standard out. A value object is created and populated with mock data as much as possible, then
    * converted to json.
+   *
+   * @param type the type of instance to generate
    */
   public static void printSample(Class<?> type) {
     System.out.println(asJson(type));
@@ -112,12 +118,20 @@ public class Jsongen {
   /**
    * Produce a value object serialized as json that is suitable for testing. A value object is
    * created and populated with mock data as much as possible, then converted to json.
+   *
+   * @param type the type of instance to generate
+   * @return a value object serialized as json
    */
   public static String asJson(Class<?> type) {
     return toJson(Valuegen.createValueObject(type, generatorConfig));
   }
 
-  /** Convert the provided object to json via {@link Gson}. */
+  /**
+   * Convert the provided object to json via Jackson.
+   *
+   * @param valueObject a value object you wish to serialize
+   * @return the provided value object serialized as json
+   */
   public static String toJson(Object valueObject) {
 
     SerializerFactory serializerFactory =

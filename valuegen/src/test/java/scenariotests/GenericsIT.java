@@ -195,7 +195,6 @@ public class GenericsIT {
   @Test // FIXME extra interfaces should not be ignored
   public void generateGenericNumberAndInterfaceBoundTypeObject() {
     // T where T extends Number & Cloneable
-    // Number class is useful, extra interfaces are not and are ignored
     GenericNumberAndInterfaceBoundTypeObject<CustomNumber> expected =
         new GenericNumberAndInterfaceBoundTypeObject<>();
 

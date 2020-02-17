@@ -27,13 +27,13 @@ public class ValueObjectExtension
 
   private ObjectMarshaller marshaller = new ObjectMarshaller();
 
-  /** injects static fields that are annotated with {@link @ValueObject} */
+  /** Inject static fields that are annotated with {@link ValueObject}. */
   @Override
   public void beforeAll(ExtensionContext context) throws Exception {
     injectFields(context, null, this::isStatic);
   }
 
-  /** injects non-static fields that are annotated with {@link @ValueObject} */
+  /** Inject non-static fields that are annotated with {@link ValueObject}. */
   @Override
   public void beforeEach(ExtensionContext context) throws Exception {
     injectFields(context, context.getRequiredTestInstance(), this::isNotStatic);
@@ -106,7 +106,10 @@ public class ValueObjectExtension
     return annotation.generate()
         ? Valuegen.createValueObject(type)
         : marshaller.marshalJson(
-            annotation, parameterName, type, valueObjectBasePath.orElse(PATH_PARAMETER_DEFAULT_VALUE));
+            annotation,
+            parameterName,
+            type,
+            valueObjectBasePath.orElse(PATH_PARAMETER_DEFAULT_VALUE));
   }
 
   private boolean isNotStatic(Field field) {
