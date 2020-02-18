@@ -16,6 +16,7 @@
   <properties>
     <bean-matchers.version>0.10</bean-matchers.version>
   </properties>
+  
   <dependencies>
     <dependency>
       <groupId>com.google.code.bean-matchers</groupId>

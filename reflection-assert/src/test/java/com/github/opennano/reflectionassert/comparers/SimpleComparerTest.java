@@ -175,6 +175,13 @@ public class SimpleComparerTest {
   }
 
   @Test
+  public void compare_objectsAreAlwaysEqual() {
+    Diff actual = comparer.compare("mockPath", new Object(), new Object(), null, false);
+
+    assertEquals(NULL_TOKEN, actual);
+  }
+
+  @Test
   public void compare_different() {
     Diff actual = comparer.compare("mockPath", 1, 2, null, false);
 

@@ -102,7 +102,7 @@ public class SubtypeUtil {
 
     List<Class<?>> candidates =
         provider
-            .findCandidateComponents("")
+            .findCandidateComponents("") // any package name
             .stream()
             .map(defn -> ClassUtils.resolveClassName(defn.getBeanClassName(), null))
             .limit(2)

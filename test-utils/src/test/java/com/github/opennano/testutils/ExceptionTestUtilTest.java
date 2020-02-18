@@ -22,13 +22,34 @@ public class ExceptionTestUtilTest {
   }
 
   @Test
-  public void assertValidException_throws() {
+  public void assertValidException_instantiationError() {
     assertThrows(
-        IllegalArgumentException.class,
+        TestUtilException.class,
         () -> ExceptionTestUtil.assertValidException(WeirderException.class));
   }
 
-  /** Has only a no-arg exception constructor */
+  @Test
+  public void assertValidException_badMessage() {
+    assertThrows(
+        TestUtilException.class,
+        () -> ExceptionTestUtil.assertValidException(BadMessageException.class));
+  }
+
+  @Test
+  public void assertValidException_badCause() {
+    assertThrows(
+        TestUtilException.class,
+        () -> ExceptionTestUtil.assertValidException(BadCauseException.class));
+  }
+
+  @Test
+  public void assertValidException_badDefaultMessage() {
+    assertThrows(
+        TestUtilException.class,
+        () -> ExceptionTestUtil.assertValidException(BadDefaultMessageException.class));
+  }
+
+  /* has only a no-arg exception constructor */
   public static class SimpleException extends Throwable {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +57,7 @@ public class ExceptionTestUtilTest {
     public SimpleException() {}
   }
 
-  /** Has all 4 java exception constructors */
+  /* has all 4 java exception constructors */
   public static class FullException extends Throwable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +77,37 @@ public class ExceptionTestUtilTest {
     }
   }
 
-  /** Has full constructor but no others */
+  /* has a message that is ignored */
+  public static class BadMessageException extends Throwable {
+
+    private static final long serialVersionUID = 1L;
+
+    public BadMessageException(String message) {
+      super(); // forgot to propagate message
+    }
+  }
+
+  /* has a cause that is ignored */
+  public static class BadCauseException extends Throwable {
+
+    private static final long serialVersionUID = 1L;
+
+    public BadCauseException(Throwable cause) {
+      super("oops"); // forgot to propagate cause
+    }
+  }
+
+  /* clobbers default message when only cause is passed in */
+  public static class BadDefaultMessageException extends Throwable {
+
+    private static final long serialVersionUID = 1L;
+
+    public BadDefaultMessageException(Throwable cause) {
+      super(null, cause); // clobbers default message
+    }
+  }
+
+  /* has full constructor but no others */
   public static class WeirdException extends WeirderException {
 
     private static final long serialVersionUID = 1L;
