@@ -8,7 +8,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -83,6 +82,8 @@ public class ReflectionUtil {
         // but in practice there can only ever be one
         populateTypeInfoFromLowerBound(typeInfo, lowerBounds[0], instanceClass, declaringClass);
       }
+    } else {
+    	throw new IllegalArgumentException("unknown type " + type.getClass());
     }
   }
 
@@ -111,26 +112,9 @@ public class ReflectionUtil {
    * For type parameters that cannot be determined, <code>null</code> is returned.
    */
   private static Map<TypeVariable<?>, Type> getTypeMap(Class<?> subclass, Class<?> superclass) {
+    Map<TypeVariable<?>, Type> typeMap = new HashMap<>(2 * superclass.getTypeParameters().length);
 
-    // ensure that what we call the subclass really is
-    if (!superclass.isAssignableFrom(subclass)) {
-      return Collections.emptyMap();
-    }
-
-    // only consider classes
-    if (superclass.isInterface() || subclass.isInterface()) {
-      return Collections.emptyMap();
-    }
-
-    TypeVariable<?>[] typeVariables = superclass.getTypeParameters();
-    Map<TypeVariable<?>, Type> typeMap = new HashMap<>(2 * typeVariables.length);
-
-    // if the class has no parameters, return
-    if (typeVariables.length == 0) {
-      return typeMap;
-    }
-
-    // get the whole class heirarchy between subtype and supertype inclusive
+    // get the whole class hierarchy between subtype and supertype inclusive
     List<Class<?>> typeHeirarchy = new ArrayList<>();
     Class<?> supertype = subclass;
     while (!superclass.equals(supertype)) {
@@ -143,7 +127,7 @@ public class ReflectionUtil {
       resolveTypeVariables(typeHeirarchy.get(i), typeHeirarchy.get(i + 1), typeMap);
     }
 
-    // contains the best information we could get from the type heirarchy
+    // contains the best information we could get from the type hierarchy
     // if we couldn't resolve a variable at all this map would return null
     return typeMap;
   }
@@ -152,12 +136,6 @@ public class ReflectionUtil {
       Class<?> type, Class<?> supertype, Map<TypeVariable<?>, Type> typeMap) {
 
     TypeVariable<?>[] typeParameters = supertype.getTypeParameters();
-
-    // the superclass is not necessarily a generic class
-    if (typeParameters.length == 0) {
-      return;
-    }
-
     Type genericSupertype = type.getGenericSuperclass();
     Type[] resolvedTypes =
         ((genericSupertype instanceof ParameterizedType)
@@ -264,8 +242,7 @@ public class ReflectionUtil {
 
     // still multiple bounds--find a class type that is not an interface
     // if we find just one of those, that is our type
-    // interfaces can be ignored in this case as we only care about (non-static) fields
-    // also helpful: Java does not allow more than one non-interface to be an upper bound
+    // note: Java does not allow more than one non-interface to be an upper bound
     TypeInfo classBound =
         boundInfos
             .stream()
@@ -282,5 +259,9 @@ public class ReflectionUtil {
     // set all the resolved interface types on additionalInterfaces
     typeInfo.setAdditionalInterfaces(
         boundInfos.stream().map(TypeInfo::getResolvedClass).toArray(Class<?>[]::new));
+  }
+  
+  private ReflectionUtil() {
+	  //no-op: singleton
   }
 }

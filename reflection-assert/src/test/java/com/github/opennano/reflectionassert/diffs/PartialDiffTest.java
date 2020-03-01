@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.opennano.reflectionassert.diffs.PartialDiff;
 import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionInternalException;
-import com.github.opennano.reflectionassert.testutils.SingletonTestUtil;
+import com.github.opennano.testutils.SingletonTestUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class PartialDiffTest {

@@ -1,16 +1,53 @@
 package com.github.opennano.valuegen.utils;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.reflections.Reflections;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.ClassMetadata;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.core.type.filter.AssignableTypeFilter;
+import org.springframework.util.ClassUtils;
 
 import com.github.opennano.valuegen.ValueGenerationException;
 import com.github.opennano.valuegen.generator.strategies.SubtypeStrategy;
 
 public class SubtypeUtil {
+
+  public static class ConcreteImplementationsFilter extends AssignableTypeFilter {
+
+    private List<AssignableTypeFilter> typeFilters;
+
+    public ConcreteImplementationsFilter(Collection<Class<?>> types) {
+      super(null);
+      this.typeFilters = types.stream().map(AssignableTypeFilter::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory)
+        throws IOException {
+
+      ClassMetadata metadata = metadataReader.getClassMetadata();
+      if (!metadata.isConcrete()) {
+        return false;
+      }
+
+      for (AssignableTypeFilter filter : typeFilters) {
+        if (!filter.match(metadataReader, metadataReaderFactory)) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
 
   /**
    * Gets the only non-abstract, non-interface class from the classpath for the provided abstract or
@@ -18,7 +55,7 @@ public class SubtypeUtil {
    * and the method will return back the superclass for convenience.
    *
    * <p>Scanning the classpath is an expensive and slow operation, depending on number of classes
-   * present. If this is not desired behavior consider use the {@link SubtypeStrategy#SKIP_TYPES}
+   * present. If this is not desired behavior consider using the {@link SubtypeStrategy#SKIP_TYPES}
    * strategy or providing your own strategy for resolving subtypes.
    *
    * @param superclass the class object for which an instantiable subtype is requested
@@ -48,44 +85,37 @@ public class SubtypeUtil {
 
     // figure out the primary class to use, generally the primary type
     // but we might have only gotten interfaces, in which case we just pick the first
-    Class<?> primaryType = (superclass == null) ? interfaces[0] : superclass;
-    List<Class<?>> additionalTypes =
-        (superclass == null)
-            ? Arrays.asList(interfaces).subList(1, interfaces.length)
-            : Arrays.asList(interfaces);
+    Set<Class<?>> types = new HashSet<>(Arrays.asList(interfaces));
+    if (superclass != null) {
+      types.add(superclass);
+    }
 
     // find all subtypes of the primary type
     // filter out abstract classes and interfaces
-    // also remove any that don't implement any additional interfaces
+    // also remove any that don't implement all additional interfaces
     // if we get more than one, then we can't resolve to a single type
     // in which case we just pass back the input for convenience
+
+    ClassPathScanningCandidateComponentProvider provider =
+        new ClassPathScanningCandidateComponentProvider(false);
+    provider.addIncludeFilter(new ConcreteImplementationsFilter(types));
+
     List<Class<?>> candidates =
-        new Reflections()
-            .getSubTypesOf(primaryType)
+        provider
+            .findCandidateComponents("") // any package name
             .stream()
-            .filter(SubtypeUtil::isConcreteType)
-            .filter(type -> implementsAll(type, additionalTypes))
+            .map(defn -> ClassUtils.resolveClassName(defn.getBeanClassName(), null))
             .limit(2)
             .collect(Collectors.toList());
 
     return candidates.size() == 1 ? candidates.get(0) : superclass;
   }
 
-  public static List<Class<?>> getAllConcreteSubtypesOf(Class<?> type) {
-    return new Reflections()
-        .getSubTypesOf(type)
-        .stream()
-        .filter(SubtypeUtil::isConcreteType)
-        .collect(Collectors.toList());
-  }
-
   private static boolean isConcreteType(Class<?> type) {
     return !type.isInterface() && !Modifier.isAbstract(type.getModifiers());
   }
 
-  private static boolean implementsAll(Class<?> type, List<Class<?>> superinterfaces) {
-    return superinterfaces
-        .stream()
-        .allMatch(superinterface -> superinterface.isAssignableFrom(type));
+  private SubtypeUtil() {
+    // no-op: singleton
   }
 }

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: valuegen-eclipse
+Bundle-SymbolicName: valuegen-eclipse;singleton:=true
+Bundle-Version: 1.0.3.snapshot
+Require-Bundle: javax.inject,
+ org.eclipse.osgi,
+ org.eclipse.jface,
+ org.eclipse.jdt.core,
+ org.eclipse.core.runtime,
+ org.eclipse.e4.ui.services,
+ org.eclipse.e4.core.di.annotations
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: javax.annotation;version="1.2.0"
+Automatic-Module-Name: valuegen-eclipse
+Export-Package: com.github.opennano.valuegen.eclipse.handlers

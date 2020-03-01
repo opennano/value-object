@@ -73,7 +73,13 @@ public class TypeInfo {
     return hasNoSuperclass() || Modifier.isAbstract(resolvedClass.getModifiers());
   }
 
-  public boolean hasNoSuperclass() {
+  public void copy(TypeInfo fromType) {
+    resolvedClass = fromType.resolvedClass;
+    genericParameterTypes = fromType.genericParameterTypes;
+    additionalInterfaces = fromType.additionalInterfaces;
+  }
+
+  private boolean hasNoSuperclass() {
     // determines if there is a superclass for this type after resolution
     // there are a few scenarios to consider:
     // (1) the primary type resolved to an interface
@@ -86,11 +92,5 @@ public class TypeInfo {
 
   private boolean isMultipleInterfacesOnly() {
     return resolvedClass == Object.class && additionalInterfaces.length > 0;
-  }
-
-  public void copy(TypeInfo fromType) {
-    resolvedClass = fromType.resolvedClass;
-    genericParameterTypes = fromType.genericParameterTypes;
-    additionalInterfaces = fromType.additionalInterfaces;
   }
 }

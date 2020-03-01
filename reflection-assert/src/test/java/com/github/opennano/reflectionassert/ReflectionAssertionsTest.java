@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.opennano.reflectionassert.testutils.SingletonTestUtil;
+import com.github.opennano.testutils.SingletonTestUtil;
 
 /** a few quick sanity tests--end-to-end tests do a far more thorough job */
 public class ReflectionAssertionsTest {

@@ -1,8 +1,8 @@
 package scenariotests;
 
 import static com.github.opennano.reflectionassert.hamcrest.ReflectionEqualsMatcher.reflectionEquals;
-import static com.github.opennano.valuegen.ProxyMatcher.isProxy;
 import static com.github.opennano.valuegen.Valuegen.createValueObject;
+import static com.github.opennano.valuegen.testutils.ProxyMatcher.isProxy;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
@@ -195,7 +195,6 @@ public class GenericsIT {
   @Test // FIXME extra interfaces should not be ignored
   public void generateGenericNumberAndInterfaceBoundTypeObject() {
     // T where T extends Number & Cloneable
-    // Number class is useful, extra interfaces are not and are ignored
     GenericNumberAndInterfaceBoundTypeObject<CustomNumber> expected =
         new GenericNumberAndInterfaceBoundTypeObject<>();
 

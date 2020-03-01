@@ -12,7 +12,7 @@
 
   <name>JSON Value Object Generator</name>
   <description>generates value objects as JSON via field reflection</description>
-
+  
   <dependencies>
     <dependency>
       <groupId>com.github.opennano</groupId>
