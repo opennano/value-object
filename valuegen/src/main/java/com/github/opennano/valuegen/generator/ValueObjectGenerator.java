@@ -23,9 +23,8 @@ import com.github.opennano.valuegen.generator.delegates.StringValueDelegate;
 import com.github.opennano.valuegen.generator.delegates.UrlValueDelegate;
 
 /**
- * This class is responsible for creating a value object for any type of object passed in. As this
- * is not a trivial task, the work is broken down by type and passed to a chain of {@link
- * ValueGeneratorDelegate} objects to do the actual work.
+ * This class is responsible for creating a value object for any type passed in. As this is not a
+ * trivial task, the looks for an appropriate {@link ValueGeneratorDelegate} to do the realy work.
  */
 public class ValueObjectGenerator {
 
@@ -68,7 +67,12 @@ public class ValueObjectGenerator {
     this.delegateChain = delegateChain;
   }
 
-  /** standard value generation path for a {@link Field} */
+  /**
+   * Generate a value for a {@link Field} defined in the type heirarchy of the owning class.
+   *
+   * @param field a field object to reflectively generate a value for
+   * @param owningClass the class for which this field is being generated
+   */
   public Object valueFor(Field field, Class<?> owningClass) {
 
     // resolve whatever type we get into a class we can instantiate
@@ -78,7 +82,14 @@ public class ValueObjectGenerator {
     return valueFor(typeInfo, field, field.getName(), owningClass);
   }
 
-  /** standard value generation path for a class not directly associated to a field */
+  /**
+   * Generate a value for a class not directly associated to a field.
+   *
+   * @param typeInfo an object containing metadata about the objec to generate
+   * @param declaringField the field for which this value object is being generated
+   * @param nameHint hint to optionally use when populating the value object
+   * @param owningClass the class for which this field is being generated
+   */
   public Object valueFor(
       TypeInfo typeInfo, Field declaringField, String nameHint, Class<?> owningClass) {
 

@@ -1,15 +1,5 @@
 package com.github.opennano.reflectionassert.hamcrest;
 
-import java.util.stream.Stream;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-
-import com.github.opennano.reflectionassert.LeniencyMode;
-import com.github.opennano.reflectionassert.ReflectionAssertions;
-import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +10,17 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+
+import static com.github.opennano.reflectionassert.LeniencyMode.*;
+import static com.github.opennano.reflectionassert.ReflectionAssertions.*;
+
+import com.github.opennano.reflectionassert.LeniencyMode;
+import com.github.opennano.reflectionassert.exceptions.ReflectionAssertionException;
 
 public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
 
@@ -35,8 +36,7 @@ public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
   }
 
   public static Matcher<Object> lenientEquals(Object expected) {
-    return new ReflectionEqualsMatcher(
-        expected, LeniencyMode.IGNORE_DEFAULTS, LeniencyMode.LENIENT_ORDER);
+    return new ReflectionEqualsMatcher(expected, IGNORE_DEFAULTS, LENIENT_ORDER);
   }
 
   public ReflectionEqualsMatcher(Object expected, LeniencyMode... modes) {
@@ -47,7 +47,7 @@ public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
   @Override
   protected boolean matchesSafely(Object item) {
     try {
-      ReflectionAssertions.assertReflectionEquals(expected, item, modes);
+      assertReflectionEquals(expected, item, modes);
       return true;
     } catch (ReflectionAssertionException e) {
       errorMessage = e.getMessage();
@@ -60,7 +60,7 @@ public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
     String type = expected.getClass().getSimpleName();
     description.appendText(type + " objects should be reflectively equal");
     String modeDescriptions =
-        Stream.of(modes).map(mode -> describe(mode)).collect(GRAMMATIC_LIST_COLLECTOR);
+        Stream.of(modes).map(this::describe).collect(GRAMMATIC_LIST_COLLECTOR);
 
     if (!modeDescriptions.isEmpty()) {
       description.appendText(String.format(" (ignoring %s)", modeDescriptions));
@@ -68,11 +68,11 @@ public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
   }
 
   private String describe(LeniencyMode mode) {
-    if (LeniencyMode.IGNORE_DEFAULTS.equals(mode)) {
+    if (IGNORE_DEFAULTS.equals(mode)) {
       return "default values";
-    } else if (LeniencyMode.LENIENT_DATES.equals(mode)) {
+    } else if (LENIENT_DATES.equals(mode)) {
       return "date differences";
-    } else if (LeniencyMode.LENIENT_ORDER.equals(mode)) {
+    } else if (LENIENT_ORDER.equals(mode)) {
       return "collection order";
     }
     return "unknown mode " + mode;
@@ -87,8 +87,8 @@ public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
       implements Collector<CharSequence, List<CharSequence>, String> {
 
     private static final String SEPARATOR = ", ";
-    private static final String PADDED_LOGIC_LABEL = " and";
-    private static final String DOUBLY_PADDED_LOGIC_LABEL = PADDED_LOGIC_LABEL + " ";
+    private static final String RIGHT_PADDED_LOGIC_LABEL = "and ";
+    private static final String DOUBLY_PADDED_LOGIC_LABEL = " and ";
 
     @Override
     public Supplier<List<CharSequence>> supplier() {
@@ -109,20 +109,20 @@ public class ReflectionEqualsMatcher extends TypeSafeMatcher<Object> {
     }
 
     @Override
-    public Function<List<CharSequence>, String> finisher() {
-      return this::finish;
+    public Set<Characteristics> characteristics() {
+      return Collections.emptySet();
     }
 
     @Override
-    public Set<Characteristics> characteristics() {
-      return Collections.emptySet();
+    public Function<List<CharSequence>, String> finisher() {
+      return this::finish;
     }
 
     private String finish(List<CharSequence> items) {
       if (items.size() > 2) {
         // "a, b, and c"
         CharSequence lastElement = items.remove(items.size() - 1);
-        items.add(PADDED_LOGIC_LABEL + lastElement);
+        items.add(RIGHT_PADDED_LOGIC_LABEL + lastElement);
         return join(items, SEPARATOR);
       }
 

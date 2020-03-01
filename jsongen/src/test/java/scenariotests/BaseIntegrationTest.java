@@ -23,7 +23,7 @@ public abstract class BaseIntegrationTest {
 
   // UTILITY METHODS
 
-  /**
+  /*
    * create a simple json string using the provided keys and values, where all values are simple
    * types like number, null, bool, string, etc. (not arrays or objects). For more complicated json
    * externalize to a file and use readFile
