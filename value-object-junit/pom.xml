@@ -12,6 +12,10 @@
 
   <name>Value Object JUnit</name>
   <description>provides some JUnit 5 value object conveniences</description>
+  
+  <properties>
+    <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -53,6 +57,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <compilerArgs>
             <arg>-parameters</arg>
