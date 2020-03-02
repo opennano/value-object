@@ -1,2 +1,10 @@
 language: java
 
+jobs:
+  include:
+    - stage: ci
+      script: "mvn deploy --settings settings.xml"
+    - stage: release
+      script: "mvn release:clean release:prepare release:perform --settings settings.xml"
+      if: $RELEASE = true
+

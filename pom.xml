@@ -89,7 +89,7 @@
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-    <nexus-staging-maven-plugin>1.6.8</nexus-staging-maven-plugin>
+    <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <pitest-junit5-plugin.version>0.8</pitest-junit5-plugin.version>
     <pitest-maven.version>1.4.3</pitest-maven.version>
@@ -98,7 +98,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- https://mvnrepository.com/artifact/org.junit/junit-bom -->
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
@@ -286,12 +285,12 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>${nexus-staging-maven-plugin}</version>
+        <version>${nexus-staging-maven-plugin.version}</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>ossrh</serverId>
           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>false</autoReleaseAfterClose>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
     </plugins>
