@@ -1,10 +1,23 @@
 language: java
+jdk:
+  - openjdk8
+  - oraclejdk8
+ 
+before_install:
+  - echo $ENC_GPG_KEY | base64 --decode | gpg --import
+  - echo $ENC_GPG_OWNER_TRUST | base64 --decode | gpg --import-ownertrust
 
 jobs:
   include:
     - stage: ci
-      script: "mvn deploy --settings settings.xml"
+      script: "mvn clean deploy --settings settings.xml -B -Pdeploy"
+      on:
+        branch: master
+        tags: false
     - stage: release
-      script: "mvn release:clean release:prepare release:perform --settings settings.xml"
-      if: $RELEASE = true
+      script: "mvn clean release:clean release:prepare release:perform --settings settings.xml -DSkipTests -B -Pdeploy"
+      on:
+        branch: master
+        tags: true
+        condition: $TRAVIS_TAG == "tag-new-release"
 
