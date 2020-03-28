@@ -5,6 +5,7 @@ jdk:
 before_install:
   - echo $ENC_GPG_KEY | base64 --decode | gpg --import
   - echo $ENC_GPG_OWNER_TRUST | base64 --decode | gpg --import-ownertrust
+  - gpg --list-keys
 
 jobs:
   include:
