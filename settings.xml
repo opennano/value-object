@@ -19,7 +19,7 @@
       </activation>
       <properties>
         <gpg.executable>gpg</gpg.executable>
-        <gpg.passphrase><![CDATA[${env.CI_DEPLOY_PASSWORD}]]></gpg.passphrase>
+        <gpg.passphrase>${env.CI_DEPLOY_PASSWORD}</gpg.passphrase>
       </properties>
     </profile>
   </profiles>

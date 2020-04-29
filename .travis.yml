@@ -9,8 +9,12 @@ before_install:
 
 jobs:
   include:
+    - stage: pr
+      script: "mvn clean deploy"
+      if: $TRAVIS_PULL_REQUEST" == 'true'
     - stage: ci
       script: "mvn clean deploy --settings settings.xml -B -Pdeploy"
+      if: $TRAVIS_PULL_REQUEST" == 'false'
       on:
         branch: master
         tags: false
