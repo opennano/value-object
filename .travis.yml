@@ -14,14 +14,8 @@ jobs:
       if: $TRAVIS_PULL_REQUEST" == 'true'
     - stage: ci
       script: "mvn clean deploy --settings settings.xml -B -Pdeploy"
-      if: $TRAVIS_PULL_REQUEST" == 'false'
-      on:
-        branch: master
-        tags: false
+      if: $TRAVIS_PULL_REQUEST" == 'false' AND branch = master AND $TRAVIS_TAG != "tag-new-release"
     - stage: release
       script: "mvn clean release:clean release:prepare release:perform --settings settings.xml -DSkipTests -B -Pdeploy"
-      on:
-        branch: master
-        tags: true
-        condition: $TRAVIS_TAG == "tag-new-release"
+      if: $TRAVIS_PULL_REQUEST" == 'false' AND branch = master AND $TRAVIS_TAG == "tag-new-release"
 
