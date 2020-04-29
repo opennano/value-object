@@ -17,4 +17,3 @@ jobs:
     - stage: release
       script: "mvn clean release:clean release:prepare release:perform -s settings.xml -Dmaven.test.skip=true -B -P deploy"
       if: $TRAVIS_PULL_REQUEST" == 'false' AND branch = master AND $TRAVIS_TAG == "tag-new-release"
-
