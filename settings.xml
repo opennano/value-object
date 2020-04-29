@@ -19,6 +19,7 @@
       </activation>
       <properties>
         <gpg.executable>gpg</gpg.executable>
+        <gpg.keyname>${env.GPG_KEY_NAME}</gpg.keyname>
         <gpg.passphrase>${env.CI_DEPLOY_PASSWORD}</gpg.passphrase>
       </properties>
     </profile>

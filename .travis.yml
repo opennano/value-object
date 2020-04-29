@@ -3,8 +3,7 @@ jdk:
   - openjdk8
  
 before_install:
-  - echo $ENC_GPG_KEY | base64 --decode | gpg --import
-  - echo $ENC_GPG_OWNER_TRUST | base64 --decode | gpg --import-ownertrust
+  - echo $ENC_GPG_KEY | base64 --decode | gpg --fast-import
   - gpg --list-keys
 
 jobs:
@@ -13,9 +12,9 @@ jobs:
       script: "mvn clean deploy"
       if: $TRAVIS_PULL_REQUEST" == 'true'
     - stage: ci
-      script: "mvn clean deploy --settings settings.xml -B -Pdeploy"
+      script: "mvn clean deploy -s settings.xml -Dmaven.test.skip=true -B -P deploy"
       if: $TRAVIS_PULL_REQUEST" == 'false' AND branch = master AND $TRAVIS_TAG != "tag-new-release"
     - stage: release
-      script: "mvn clean release:clean release:prepare release:perform --settings settings.xml -DSkipTests -B -Pdeploy"
+      script: "mvn clean release:clean release:prepare release:perform -s settings.xml -Dmaven.test.skip=true -B -P deploy"
       if: $TRAVIS_PULL_REQUEST" == 'false' AND branch = master AND $TRAVIS_TAG == "tag-new-release"
 
